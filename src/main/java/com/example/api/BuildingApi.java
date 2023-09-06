@@ -3,46 +3,66 @@ package com.example.api;
 import java.util.List;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
+import com.example.bean.AssimentBuildingBean;
 import com.example.bean.BuildingBean;
+import com.example.customexception.FieldRequiredException;
 
-@Controller
+@RestController
+@RequestMapping(value = "/api/building")
 public class BuildingApi {
-	@RequestMapping(value = "/api/building",method = RequestMethod.GET)
-	public @ResponseBody List<BuildingApi> getBuilding(@RequestParam( name = "name") String name,@RequestParam(name = "numberofbasement" ,required = false) Integer numberofbasement) {
+	@GetMapping
+	public  List<BuildingApi> getBuilding(@RequestParam( name = "name") String name,@RequestParam(name = "numberofbasement" ,required = false) Integer numberofbasement) {
 		System.out.println(name);
 		System.out.println(numberofbasement);
 		return null;
 	}
-	@RequestMapping(value = "/api/building/{buildingId}",method = RequestMethod.GET)
-	public @ResponseBody List<BuildingApi> getBuilding(@PathVariable("buildingId") Long buildingId) {
+	@GetMapping(value = "/{buildingId}")
+	public  List<BuildingApi> getBuilding(@PathVariable("buildingId") Long buildingId) {
 		System.out.println(buildingId);
 		return null;
 	}
 	
-	@RequestMapping(value = "/api/building",method = RequestMethod.POST)
-	public @ResponseBody BuildingApi createBuilding(@RequestBody BuildingBean newBuilding) {
-		System.out.println(newBuilding.getName());
-		return null;
+	@PostMapping
+	public  BuildingBean createBuilding(@RequestBody BuildingBean newBuilding) {
+		validateData(newBuilding);
+		return newBuilding;
 	}
-	@RequestMapping(value = "/api/building",method = RequestMethod.PUT)
-	public @ResponseBody BuildingApi updateBuilding(@RequestBody BuildingBean updateBuilding) {
+	private void validateData(BuildingBean newBuilding) {
+		if(newBuilding.getName() == null || newBuilding.getName().equals("") || newBuilding.getNumberOfBasement() == null) {
+			throw new FieldRequiredException("name or numberofbasement is null");
+		}
+		
+	}
+	@PutMapping
+	public  BuildingApi updateBuilding(@RequestBody BuildingBean updateBuilding) {
 		System.out.println(updateBuilding.getId());
 		System.out.println(updateBuilding.getName());
 		return null;
 	}
-	@RequestMapping(value = "/api/building",method = RequestMethod.DELETE)
-	public @ResponseBody BuildingApi deleteBuilding(@RequestBody Long[] ids) {
+	@DeleteMapping
+	public  BuildingApi deleteBuilding(@RequestBody Long[] ids) {
 		for(Long id:ids) {
 			System.out.println(id);
 		}
 		return null;
 	}
+	
+	@PostMapping("/assignment")
+	public  void assignmentBuildingBean(@RequestBody AssimentBuildingBean assignmentBuildingBean) {
+		System.out.println("hello");
+	}
+	
 	
 }
