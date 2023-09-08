@@ -1,6 +1,6 @@
-package com.example.bean;
+package com.example.model;
 
-public class BuildingBean {
+public class BuildingDTO {
 	private Long id;
 	private String name;
 	private Integer floorArea;

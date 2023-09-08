@@ -1,9 +1,9 @@
-package com.example.bean;
+package com.example.model;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ErrorResponseBean {
+public class ErrorResponseDTO {
 	private String error;
 	private List<String> details = new ArrayList<>();
 	public String getError() {

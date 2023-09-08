@@ -1,9 +1,9 @@
-package com.example.bean;
+package com.example.model;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class AssimentBuildingBean {
+public class AssimentBuildingDTO {
 	private Long buildingId;
 	private List<Long> staffIds = new ArrayList<Long>();
 	public Long getBuildingId() {
