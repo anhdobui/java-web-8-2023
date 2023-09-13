@@ -3,15 +3,26 @@ package com.example.model;
 public class BuildingDTO {
 	private Long id;
 	private String name;
+	private String address;
+	private String street;
+	private String ward;
+	private String district;
 	private Integer floorArea;
-	private Integer numberOfBasement;
-	private Long[] buildingIds;
-	
-	public Integer getNumberOfBasement() {
-		return numberOfBasement;
+	private Integer rentprice;
+	private Integer numberofbasement;
+	private String direction;
+	private String level;
+	private String rentarea;
+	private String staffs;
+	private String nameManager;
+	private String phoneManager;
+	private String types;
+	private String districtName;
+	public Long getId() {
+		return id;
 	}
-	public void setNumberOfBasement(Integer numberOfBasement) {
-		this.numberOfBasement = numberOfBasement;
+	public void setId(Long id) {
+		this.id = id;
 	}
 	public String getName() {
 		return name;
@@ -19,24 +30,97 @@ public class BuildingDTO {
 	public void setName(String name) {
 		this.name = name;
 	}
+	public String getAddress() {
+		return address;
+	}
+	public void setAddress(String address) {
+		this.address = address;
+	}
+	public String getStreet() {
+		return street;
+	}
+	public void setStreet(String street) {
+		this.street = street;
+	}
+	public String getWard() {
+		return ward;
+	}
+	public void setWard(String ward) {
+		this.ward = ward;
+	}
+	public String getDistrict() {
+		return district;
+	}
+	public void setDistrict(String district) {
+		this.district = district;
+	}
 	public Integer getFloorArea() {
 		return floorArea;
 	}
 	public void setFloorArea(Integer floorArea) {
 		this.floorArea = floorArea;
 	}
-	public Long getId() {
-		return id;
+	public Integer getRentprice() {
+		return rentprice;
 	}
-	public void setId(Long id) {
-		this.id = id;
+	public void setRentprice(Integer rentprice) {
+		this.rentprice = rentprice;
 	}
-	public Long[] getBuildingIds() {
-		return buildingIds;
+	public Integer getNumberofbasement() {
+		return numberofbasement;
 	}
-	public void setBuildingIds(Long[] buildingIds) {
-		this.buildingIds = buildingIds;
+	public void setNumberofbasement(Integer numberofbasement) {
+		this.numberofbasement = numberofbasement;
 	}
+	public String getDirection() {
+		return direction;
+	}
+	public void setDirection(String direction) {
+		this.direction = direction;
+	}
+	public String getLevel() {
+		return level;
+	}
+	public void setLevel(String level) {
+		this.level = level;
+	}
+	public String getRentarea() {
+		return rentarea;
+	}
+	public void setRentarea(String rentarea) {
+		this.rentarea = rentarea;
+	}
+	public String getStaffs() {
+		return staffs;
+	}
+	public void setStaffs(String staffs) {
+		this.staffs = staffs;
+	}
+	public String getNameManager() {
+		return nameManager;
+	}
+	public void setNameManager(String nameManager) {
+		this.nameManager = nameManager;
+	}
+	public String getPhoneManager() {
+		return phoneManager;
+	}
+	public void setPhoneManager(String phoneManager) {
+		this.phoneManager = phoneManager;
+	}
+	public String getTypes() {
+		return types;
+	}
+	public void setTypes(String types) {
+		this.types = types;
+	}
+	public String getDistrictName() {
+		return districtName;
+	}
+	public void setDistrictName(String districtName) {
+		this.districtName = districtName;
+	}
+
 	
 	
 }
