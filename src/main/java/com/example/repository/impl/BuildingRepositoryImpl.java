@@ -95,9 +95,19 @@ public class BuildingRepositoryImpl implements BuildingRepository {
 
 
 	private void buildQueryWithJoin(Map<String,Object> params,List<String> types,StringBuilder whereQuery,StringBuilder joinQuery) {
-		Integer fromRentarea = (Integer) params.get("fromrentarea");
-		Integer toRentarea = (Integer) params.get("torentarea");
-		Long staffid = (Long) params.get("staffid");
+		Integer fromRentarea = null;
+		Integer toRentarea = null;
+		Long staffid = null;
+		String districtCode = (String) params.get("districtcode");
+		if(!StringUtils.isNullOrEmpty((String)params.get("fromrentarea"))) {
+			 fromRentarea = Integer.parseInt((String)params.get("fromrentarea")) ;
+		}
+		if(!StringUtils.isNullOrEmpty((String)params.get("torentarea"))) {
+			 toRentarea = Integer.parseInt((String)params.get("torentarea"));
+		}
+		if(!StringUtils.isNullOrEmpty((String)params.get("staffid"))) {
+			staffid = Long.parseLong((String)params.get("staffid"));
+		}
 		if(fromRentarea != null || toRentarea != null) {
 			joinQuery.append(" inner join rentarea as ra on ra.buildingid=b.id");
 			if(fromRentarea != null) {
@@ -110,6 +120,10 @@ public class BuildingRepositoryImpl implements BuildingRepository {
 		if(staffid != null) {
 			joinQuery.append(" inner join assignmentbuilding as ab on ab.buildingid=b.id ");
 			whereQuery.append(" and ab.staffid ="+staffid);
+		}
+		if(!StringUtils.isNullOrEmpty(districtCode)) {
+			joinQuery.append(" inner join district as d on d.id = b.districtid");
+			whereQuery.append(" and d.code ='" + districtCode + "'");
 		}
 		if(types != null && types.size() > 0) {
 			joinQuery.append(" inner join buildingrenttype as b_rt on b.id=b_rt.buildingid")
@@ -126,51 +140,48 @@ public class BuildingRepositoryImpl implements BuildingRepository {
 
 	private void buildQueryWithoutJoin(Map<String, Object> params, StringBuilder whereQuery) {
 		String name = (String)params.get("name");
-		Integer floorarea = (Integer) params.get("floorarea");
-		Integer districtid = (Integer) params.get("districtid");
-		String ward = (String)params.get("ward");
-		String street = (String)params.get("street");
-		Integer numberofbasement = (Integer) params.get("numberofbasement");
-		String direction = (String)params.get("direction");
-		String level = (String)params.get("level");
-		String managerName = (String)params.get("managername");
-		String managerPhone = (String)params.get("managerphone");
-		Integer fromRentprice = (Integer) params.get("fromrentprice");
-		Integer toRentprice = (Integer) params.get("torentprice");
 		if(!StringUtils.isNullOrEmpty(name)) {
 			whereQuery.append(" and b.name like '%"+name+"%'");
 		}
-		if(floorarea != null) {
+		if(!StringUtils.isNullOrEmpty((String)params.get("floorarea"))) {
+			Integer floorarea = Integer.parseInt((String) params.get("floorarea")) ;
 			whereQuery.append(" and b.floorarea = "+floorarea);
 		}
-		if(districtid != null) {
-			whereQuery.append(" and b.districtid = "+districtid);
-		}
+		
+		String ward = (String)params.get("ward");
 		if(!StringUtils.isNullOrEmpty(ward)){
 			whereQuery.append(" and b.ward like '%"+ward+"%'");
 		}
+		String street = (String)params.get("street");
 		if(!StringUtils.isNullOrEmpty(street)){
 			whereQuery.append(" and b.street like '%"+street+"%'");
 		}
-		if(numberofbasement != null) {
+		if(!StringUtils.isNullOrEmpty((String)params.get("numberofbasement"))) {
+			Integer numberofbasement = Integer.parseInt((String) params.get("numberofbasement")) ;
 			whereQuery.append(" and b.numberofbasement = "+numberofbasement+"");
 		}
+		String direction = (String)params.get("direction");
 		if(!StringUtils.isNullOrEmpty(direction)) {
 			whereQuery.append(" and b.direction like '%"+direction+"%'");
 		}
+		String level = (String)params.get("level");
 		if(!StringUtils.isNullOrEmpty(level)) {
 			whereQuery.append(" and b.level like '%"+level+"%'");
 		}
+		String managerName = (String)params.get("managername");
 		if(!StringUtils.isNullOrEmpty(managerName)) {
 			whereQuery.append(" and b.managerName like '%"+managerName+"%'");
 		}
+		String managerPhone = (String)params.get("managerphone");
 		if(!StringUtils.isNullOrEmpty(managerPhone)) {
 			whereQuery.append(" and b.managerPhone like '%"+managerPhone+"%'");
 		}
-		if(fromRentprice != null) {
+		if(!StringUtils.isNullOrEmpty((String)params.get("fromrentprice"))) {
+			Integer fromRentprice = Integer.parseInt((String) params.get("fromrentprice")) ;
 			whereQuery.append(" and b.rentprice >= "+fromRentprice);
 		}
-		if(toRentprice != null) {
+		if(!StringUtils.isNullOrEmpty((String)params.get("torentprice"))) {
+			Integer toRentprice = Integer.parseInt((String) params.get("torentprice"));
 			whereQuery.append(" and b.rentprice <= "+toRentprice);
 		}
 		
