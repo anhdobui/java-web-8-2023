@@ -31,17 +31,7 @@ public class BuildingServiceImpl implements BuildingService {
 	@Autowired
 	private MapperBuilding mapperBuilding;
 	
-	@Autowired
-	private DistrictRepository districtRepository;
 	
-	@Autowired
-	private RentareaRepository rentareaRepository;
-	
-	@Autowired
-	private RenttypeRepository renttypeRepository;
-	
-	@Autowired
-	private UserRepository userRepository;
 
 	@Override
 	public List<BuildingSearchResponse> findAll() {
@@ -62,28 +52,7 @@ public class BuildingServiceImpl implements BuildingService {
 		List<BuildingEntity> buildingEntitis = buildingRepository.findBuilding(params, types);
 		for(BuildingEntity item : buildingEntitis) {
 			BuildingDTO buildingDTO = new BuildingDTO();
-			DistrictEntity districtEntity = districtRepository.getById(item.getDistrictId());
-			List<RentareaEntity> rentareaEntities = rentareaRepository.getByBuildingId(item.getId());
-			List<RenttypeEntity> renttypeEntities = renttypeRepository.getByBuildingId(item.getId());
-			List<UserEntity> staffs = userRepository.getByBuildingId(item.getId());
-			List<String> rentareaValues = new ArrayList<String>();
-			for(RentareaEntity rentareaEntity:rentareaEntities) {
-				rentareaValues.add(rentareaEntity.getValue().toString());
-			}
-			List<String> typesName = new ArrayList<String>();
-			for(RenttypeEntity renttypeEntity:renttypeEntities) {
-				typesName.add(renttypeEntity.getName());
-			}
-			List<String> nameStaffs = new ArrayList<String>();
-			for(UserEntity staff:staffs) {
-				nameStaffs.add(staff.getFullname());
-			}
-			Map<String, Object> sideInfos = new HashMap<>();
-			sideInfos.put("districtName", districtEntity.getName());
-			sideInfos.put("rentareaValues", String.join(",", rentareaValues));
-			sideInfos.put("typesName", String.join(",", typesName));
-			sideInfos.put("nameStaffs", String.join(",", nameStaffs));
-			buildingDTO = mapperBuilding.entityToDTO(item,sideInfos);
+			buildingDTO = mapperBuilding.entityToDTO(item);
 			results.add(buildingDTO);
 		}
 		return results;
