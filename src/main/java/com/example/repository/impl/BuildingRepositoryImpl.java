@@ -14,6 +14,7 @@ import com.example.constant.SystemConstant;
 import com.example.repository.BuildingRepository;
 import com.example.repository.entity.BuildingEntity;
 import com.example.utils.ConnectionUtils;
+import com.example.utils.MapUtils;
 import com.example.utils.StringUtils;
 
 @Repository
@@ -95,19 +96,10 @@ public class BuildingRepositoryImpl implements BuildingRepository {
 
 
 	private void buildQueryWithJoin(Map<String,Object> params,List<String> types,StringBuilder whereQuery,StringBuilder joinQuery) {
-		Integer fromRentarea = null;
-		Integer toRentarea = null;
-		Long staffid = null;
-		String districtCode = (String) params.get("districtcode");
-		if(!StringUtils.isNullOrEmpty((String)params.get("fromrentarea"))) {
-			 fromRentarea = Integer.parseInt((String)params.get("fromrentarea")) ;
-		}
-		if(!StringUtils.isNullOrEmpty((String)params.get("torentarea"))) {
-			 toRentarea = Integer.parseInt((String)params.get("torentarea"));
-		}
-		if(!StringUtils.isNullOrEmpty((String)params.get("staffid"))) {
-			staffid = Long.parseLong((String)params.get("staffid"));
-		}
+		Integer fromRentarea = MapUtils.getObject(params, "fromrentarea", Integer.class);
+		Integer toRentarea = MapUtils.getObject(params, "torentarea", Integer.class);
+		Long staffid = MapUtils.getObject(params, "staffid", Long.class);
+		String districtCode = MapUtils.getObject(params, "districtcode", String.class);
 		if(fromRentarea != null || toRentarea != null) {
 			joinQuery.append(" inner join rentarea as ra on ra.buildingid=b.id");
 			if(fromRentarea != null) {
@@ -139,49 +131,49 @@ public class BuildingRepositoryImpl implements BuildingRepository {
 
 
 	private void buildQueryWithoutJoin(Map<String, Object> params, StringBuilder whereQuery) {
-		String name = (String)params.get("name");
+		String name = MapUtils.getObject(params, "name", String.class);
 		if(!StringUtils.isNullOrEmpty(name)) {
 			whereQuery.append(" and b.name like '%"+name+"%'");
 		}
-		if(!StringUtils.isNullOrEmpty((String)params.get("floorarea"))) {
-			Integer floorarea = Integer.parseInt((String) params.get("floorarea")) ;
+		Integer floorarea = MapUtils.getObject(params, "floorarea", Integer.class);
+		if(floorarea != null) {
 			whereQuery.append(" and b.floorarea = "+floorarea);
 		}
 		
-		String ward = (String)params.get("ward");
+		String ward = MapUtils.getObject(params, "ward", String.class);
 		if(!StringUtils.isNullOrEmpty(ward)){
 			whereQuery.append(" and b.ward like '%"+ward+"%'");
 		}
-		String street = (String)params.get("street");
+		String street = MapUtils.getObject(params, "street", String.class);
 		if(!StringUtils.isNullOrEmpty(street)){
 			whereQuery.append(" and b.street like '%"+street+"%'");
 		}
-		if(!StringUtils.isNullOrEmpty((String)params.get("numberofbasement"))) {
-			Integer numberofbasement = Integer.parseInt((String) params.get("numberofbasement")) ;
+		Integer numberofbasement =  MapUtils.getObject(params, "numberofbasement", Integer.class);
+		if(numberofbasement != null) {
 			whereQuery.append(" and b.numberofbasement = "+numberofbasement+"");
 		}
-		String direction = (String)params.get("direction");
+		String direction = MapUtils.getObject(params, "direction", String.class);
 		if(!StringUtils.isNullOrEmpty(direction)) {
 			whereQuery.append(" and b.direction like '%"+direction+"%'");
 		}
-		String level = (String)params.get("level");
+		String level = MapUtils.getObject(params, "level", String.class);
 		if(!StringUtils.isNullOrEmpty(level)) {
 			whereQuery.append(" and b.level like '%"+level+"%'");
 		}
-		String managerName = (String)params.get("managername");
+		String managerName = MapUtils.getObject(params, "managername", String.class);
 		if(!StringUtils.isNullOrEmpty(managerName)) {
 			whereQuery.append(" and b.managerName like '%"+managerName+"%'");
 		}
-		String managerPhone = (String)params.get("managerphone");
+		String managerPhone = MapUtils.getObject(params, "managerphone", String.class);
 		if(!StringUtils.isNullOrEmpty(managerPhone)) {
 			whereQuery.append(" and b.managerPhone like '%"+managerPhone+"%'");
 		}
-		if(!StringUtils.isNullOrEmpty((String)params.get("fromrentprice"))) {
-			Integer fromRentprice = Integer.parseInt((String) params.get("fromrentprice")) ;
+		Integer fromRentprice = MapUtils.getObject(params, "fromrentprice", Integer.class);
+		if(fromRentprice != null) {
 			whereQuery.append(" and b.rentprice >= "+fromRentprice);
 		}
-		if(!StringUtils.isNullOrEmpty((String)params.get("torentprice"))) {
-			Integer toRentprice = Integer.parseInt((String) params.get("torentprice"));
+		Integer toRentprice = MapUtils.getObject(params, "torentprice", Integer.class);
+		if(toRentprice != null) {
 			whereQuery.append(" and b.rentprice <= "+toRentprice);
 		}
 		
