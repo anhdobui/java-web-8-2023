@@ -96,19 +96,8 @@ public class BuildingRepositoryImpl implements BuildingRepository {
 
 
 	private void buildQueryWithJoin(Map<String,Object> params,List<String> types,StringBuilder whereQuery,StringBuilder joinQuery) {
-		Integer fromRentarea = MapUtils.getObject(params, "fromrentarea", Integer.class);
-		Integer toRentarea = MapUtils.getObject(params, "torentarea", Integer.class);
 		Long staffid = MapUtils.getObject(params, "staffid", Long.class);
 		String districtCode = MapUtils.getObject(params, "districtcode", String.class);
-		if(fromRentarea != null || toRentarea != null) {
-			joinQuery.append(" inner join rentarea as ra on ra.buildingid=b.id");
-			if(fromRentarea != null) {
-				whereQuery.append(" and ra.value >= "+fromRentarea);
-			}
-			if(toRentarea != null) {
-				whereQuery.append(" and ra.value <= "+toRentarea);
-			}
-		}
 		if(staffid != null) {
 			joinQuery.append(" inner join assignmentbuilding as ab on ab.buildingid=b.id ");
 			whereQuery.append(" and ab.staffid ="+staffid);
@@ -120,12 +109,13 @@ public class BuildingRepositoryImpl implements BuildingRepository {
 		if(types != null && types.size() > 0) {
 			joinQuery.append(" inner join buildingrenttype as b_rt on b.id=b_rt.buildingid")
 					.append(" inner join renttype as rt on rt.id = b_rt.renttypeid");
-			whereQuery.append(" and");
-			List<String> builWhereTypes = new ArrayList<>();
+			whereQuery.append(" and rt.code IN (");
+			List<String> listStringType = new ArrayList<>();
 			for(String code : types) {
-				builWhereTypes.add(" rt.code ='"+code+"'");
+				listStringType.add("'"+code+"'");
 			}
-			whereQuery.append(String.join(" or", builWhereTypes));
+			whereQuery.append(String.join(",", listStringType));
+			whereQuery.append(")");
 		}
 	}
 
@@ -175,6 +165,18 @@ public class BuildingRepositoryImpl implements BuildingRepository {
 		Integer toRentprice = MapUtils.getObject(params, "torentprice", Integer.class);
 		if(toRentprice != null) {
 			whereQuery.append(" and b.rentprice <= "+toRentprice);
+		}
+		Integer fromRentarea = MapUtils.getObject(params, "fromrentarea", Integer.class);
+		Integer toRentarea = MapUtils.getObject(params, "torentarea", Integer.class);
+		if(fromRentarea != null || toRentarea != null) {
+			whereQuery.append(" and EXISTS (select * from rentarea as ra WHERE ra.buildingid = b.id");
+			if(fromRentarea != null) {
+				whereQuery.append(" and ra.value >= "+fromRentarea);
+			}
+			if(toRentarea != null) {
+				whereQuery.append(" and ra.value <= "+toRentarea);
+			}
+			whereQuery.append(")");
 		}
 		
 	}
