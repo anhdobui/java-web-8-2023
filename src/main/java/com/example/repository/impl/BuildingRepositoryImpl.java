@@ -15,6 +15,7 @@ import com.example.repository.BuildingRepository;
 import com.example.repository.entity.BuildingEntity;
 import com.example.utils.ConnectionUtils;
 import com.example.utils.MapUtils;
+import com.example.utils.NumberUtils;
 import com.example.utils.StringUtils;
 
 @Repository
@@ -121,64 +122,33 @@ public class BuildingRepositoryImpl implements BuildingRepository {
 
 
 	private void buildQueryWithoutJoin(Map<String, Object> params, StringBuilder whereQuery) {
-		String name = MapUtils.getObject(params, "name", String.class);
-		if(!StringUtils.isNullOrEmpty(name)) {
-			whereQuery.append(" and b.name like '%"+name+"%'");
-		}
-		Integer floorarea = MapUtils.getObject(params, "floorarea", Integer.class);
-		if(floorarea != null) {
-			whereQuery.append(" and b.floorarea = "+floorarea);
-		}
-		
-		String ward = MapUtils.getObject(params, "ward", String.class);
-		if(!StringUtils.isNullOrEmpty(ward)){
-			whereQuery.append(" and b.ward like '%"+ward+"%'");
-		}
-		String street = MapUtils.getObject(params, "street", String.class);
-		if(!StringUtils.isNullOrEmpty(street)){
-			whereQuery.append(" and b.street like '%"+street+"%'");
-		}
-		Integer numberofbasement =  MapUtils.getObject(params, "numberofbasement", Integer.class);
-		if(numberofbasement != null) {
-			whereQuery.append(" and b.numberofbasement = "+numberofbasement+"");
-		}
-		String direction = MapUtils.getObject(params, "direction", String.class);
-		if(!StringUtils.isNullOrEmpty(direction)) {
-			whereQuery.append(" and b.direction like '%"+direction+"%'");
-		}
-		String level = MapUtils.getObject(params, "level", String.class);
-		if(!StringUtils.isNullOrEmpty(level)) {
-			whereQuery.append(" and b.level like '%"+level+"%'");
-		}
-		String managerName = MapUtils.getObject(params, "managername", String.class);
-		if(!StringUtils.isNullOrEmpty(managerName)) {
-			whereQuery.append(" and b.managerName like '%"+managerName+"%'");
-		}
-		String managerPhone = MapUtils.getObject(params, "managerphone", String.class);
-		if(!StringUtils.isNullOrEmpty(managerPhone)) {
-			whereQuery.append(" and b.managerPhone like '%"+managerPhone+"%'");
-		}
-		Integer fromRentprice = MapUtils.getObject(params, "fromrentprice", Integer.class);
-		if(fromRentprice != null) {
-			whereQuery.append(" and b.rentprice >= "+fromRentprice);
-		}
-		Integer toRentprice = MapUtils.getObject(params, "torentprice", Integer.class);
-		if(toRentprice != null) {
-			whereQuery.append(" and b.rentprice <= "+toRentprice);
-		}
-		Integer fromRentarea = MapUtils.getObject(params, "fromrentarea", Integer.class);
-		Integer toRentarea = MapUtils.getObject(params, "torentarea", Integer.class);
-		if(fromRentarea != null || toRentarea != null) {
-			whereQuery.append(" and EXISTS (select * from rentarea as ra WHERE ra.buildingid = b.id");
-			if(fromRentarea != null) {
-				whereQuery.append(" and ra.value >= "+fromRentarea);
+		for(Map.Entry<String, Object> item : params.entrySet()) {
+			if(!item.getKey().equals("staffid") && !item.getKey().equals("districtcode")) {
+				if(!item.getKey().endsWith("rentarea")) {
+					String value = item.getValue().toString();
+					if(NumberUtils.isInteger(value)) {
+						whereQuery.append(" and b."+item.getKey().toLowerCase() +" = "+Integer.parseInt(value));
+					}else {
+						if(!StringUtils.isNullOrEmpty(value)) {
+							whereQuery.append(" and b." + item.getKey().toLowerCase() + " like '%" + value + "%'");
+						}
+					}
+				}else {
+					Integer fromRentarea = MapUtils.getObject(params, "fromrentarea", Integer.class);
+					Integer toRentarea = MapUtils.getObject(params, "torentarea", Integer.class);
+					if(fromRentarea != null || toRentarea != null) {
+						whereQuery.append(" and EXISTS (select * from rentarea as ra WHERE ra.buildingid = b.id");
+						if(fromRentarea != null) {
+							whereQuery.append(" and ra.value >= "+fromRentarea);
+						}
+						if(toRentarea != null) {
+							whereQuery.append(" and ra.value <= "+toRentarea);
+						}
+						whereQuery.append(")");
+					}
+				}
 			}
-			if(toRentarea != null) {
-				whereQuery.append(" and ra.value <= "+toRentarea);
-			}
-			whereQuery.append(")");
 		}
-		
 	}
 	
 }
