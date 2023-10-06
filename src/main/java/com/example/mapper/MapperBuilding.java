@@ -1,9 +1,9 @@
 package com.example.mapper;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+import java.util.stream.Collectors;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -32,39 +32,24 @@ public class MapperBuilding {
 	@Autowired
 	private UserRepository userRepository;
 	
+	@Autowired
+	private ModelMapper modelMapper;
+	
 	public BuildingDTO entityToDTO(BuildingEntity buildingEntity) {
-		BuildingDTO buildingDTO = new BuildingDTO();
+		BuildingDTO result = modelMapper.map(buildingEntity, BuildingDTO.class);
 		DistrictEntity districtEntity = districtRepository.getById(buildingEntity.getDistrictId());
 		String districtName = districtEntity.getName();
-		List<RentareaEntity> rentareaEntities = rentareaRepository.getByBuildingId(buildingEntity.getId());
-		List<String> rentareaValues = new ArrayList<String>();
-		for(RentareaEntity rentareaEntity:rentareaEntities) {
-			rentareaValues.add(rentareaEntity.getValue().toString());
-		}
-		List<RenttypeEntity> renttypeEntities = renttypeRepository.getByBuildingId(buildingEntity.getId());
-		List<String> typesName = new ArrayList<String>();
-		for(RenttypeEntity renttypeEntity:renttypeEntities) {
-			typesName.add(renttypeEntity.getName());
-		}
-		List<UserEntity> staffs = userRepository.getByBuildingId(buildingEntity.getId());
-		List<String> nameStaffs = new ArrayList<>();
-		for(UserEntity staff:staffs) {
-			nameStaffs.add(staff.getFullname());
-		}
-		buildingDTO.setName(buildingEntity.getName());
-		buildingDTO.setId(buildingEntity.getId());
-		buildingDTO.setDirection(buildingEntity.getDirection());
-		buildingDTO.setFloorArea(buildingEntity.getFloorArea());
-		buildingDTO.setLevel(buildingEntity.getLevel());
-		buildingDTO.setNameManager(buildingEntity.getManagerName());
-		buildingDTO.setPhoneManager(buildingEntity.getManagerPhone());
-		buildingDTO.setNumberofbasement(buildingEntity.getNumberOfBasement());
-		buildingDTO.setRentprice(buildingEntity.getRentprice());
-		buildingDTO.setRentarea(String.join(",", rentareaValues));
-		buildingDTO.setTypes(String.join(",", typesName));
-		buildingDTO.setStaffs(String.join(",", nameStaffs));
 		String address = buildingEntity.getStreet()+" - "+buildingEntity.getWard()+" - "+ districtName;
-		buildingDTO.setAddress(address);
-		return buildingDTO;
+		result.setAddress(address);
+		List<RentareaEntity> rentareaEntities = rentareaRepository.getByBuildingId(buildingEntity.getId());
+		String rentareaValuesStr = rentareaEntities.stream().map(RentareaEntity::getValue).map(item -> item.toString()).collect(Collectors.joining(","));
+		List<RenttypeEntity> renttypeEntities = renttypeRepository.getByBuildingId(buildingEntity.getId());
+		String typeNames = renttypeEntities.stream().map(RenttypeEntity::getName).collect(Collectors.joining(","));
+		List<UserEntity> staffs = userRepository.getByBuildingId(buildingEntity.getId());
+		String nameStaffs = staffs.stream().map(UserEntity::getFullname).collect(Collectors.joining(","));
+		result.setRentarea(rentareaValuesStr);
+		result.setTypes(typeNames);
+		result.setStaffs(nameStaffs);
+		return result;
 	}
 }

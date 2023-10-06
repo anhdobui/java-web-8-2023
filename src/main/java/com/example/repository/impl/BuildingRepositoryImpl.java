@@ -7,6 +7,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Repository;
 
@@ -111,11 +112,8 @@ public class BuildingRepositoryImpl implements BuildingRepository {
 			joinQuery.append(" inner join buildingrenttype as b_rt on b.id=b_rt.buildingid")
 					.append(" inner join renttype as rt on rt.id = b_rt.renttypeid");
 			whereQuery.append(" and rt.code IN (");
-			List<String> listStringType = new ArrayList<>();
-			for(String code : types) {
-				listStringType.add("'"+code+"'");
-			}
-			whereQuery.append(String.join(",", listStringType));
+			String sqlJoinTypes = types.stream().map(item -> "'"+item+"'").collect(Collectors.joining(","));
+			whereQuery.append(sqlJoinTypes);
 			whereQuery.append(")");
 		}
 	}
@@ -123,7 +121,7 @@ public class BuildingRepositoryImpl implements BuildingRepository {
 
 	private void buildQueryWithoutJoin(Map<String, Object> params, StringBuilder whereQuery) {
 		for(Map.Entry<String, Object> item : params.entrySet()) {
-			if(!item.getKey().equals("staffid") && !item.getKey().equals("districtcode")) {
+			if(!item.getKey().equals("staffid") && !item.getKey().equals("districtcode") && !item.getKey().equals("types")) {
 				if(!item.getKey().endsWith("rentarea")) {
 					String value = item.getValue().toString();
 					if(NumberUtils.isInteger(value)) {
