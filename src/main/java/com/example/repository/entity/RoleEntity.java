@@ -29,11 +29,10 @@ public class RoleEntity  {
     @Column(unique = true, nullable = false)
     private String code;
     
-    @OneToMany(mappedBy = "role")
-	private List<UserRoleEntity> userRoles = new ArrayList<>();
     
-//    @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY)
-//    private List<UserEntity> users = new ArrayList<>();
+    @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY)
+    private List<UserEntity> users = new ArrayList<>();
+    
     public Long getId() {
 		return id;
 	}
@@ -58,20 +57,12 @@ public class RoleEntity  {
         this.code = code;
     }
 
-	public List<UserRoleEntity> getUserRoles() {
-		return userRoles;
-	}
+    public List<UserEntity> getUsers() {
+        return users;
+    }
 
-	public void setUserRoles(List<UserRoleEntity> userRoles) {
-		this.userRoles = userRoles;
-	}
-
-//    public List<UserEntity> getUsers() {
-//        return users;
-//    }
-//
-//    public void setUsers(List<UserEntity> users) {
-//        this.users = users;
-//    }
+    public void setUsers(List<UserEntity> users) {
+        this.users = users;
+    }
     
 }

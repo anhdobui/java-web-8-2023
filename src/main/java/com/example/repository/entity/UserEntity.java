@@ -40,14 +40,10 @@ public class UserEntity  {
     @Column(name = "email")
     private String email;
     
-    @OneToMany(mappedBy = "user")
-	private List<UserRoleEntity> userRoles = new ArrayList<>();
-	
-//	  @ManyToMany(fetch = FetchType.LAZY)
-//	  @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id",
-//	  nullable = false), inverseJoinColumns = @JoinColumn(name = "role_id",
-//	  nullable = false)) 
-//	  private List<RoleEntity> roles = new ArrayList<>();
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id", nullable = false), 
+	  								inverseJoinColumns = @JoinColumn(name = "role_id",nullable = false)) 
+	private List<RoleEntity> roles = new ArrayList<>();
 	 
     public Long getId() {
 		return id;
@@ -89,13 +85,13 @@ public class UserEntity  {
         this.status = status;
     }
 
-//    public List<RoleEntity> getRoles() {
-//        return roles;
-//    }
-//
-//    public void setRoles(List<RoleEntity> roles) {
-//        this.roles = roles;
-//    }
+    public List<RoleEntity> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<RoleEntity> roles) {
+        this.roles = roles;
+    }
 
     public String getEmail() {
         return email;
@@ -105,12 +101,6 @@ public class UserEntity  {
         this.email = email;
     }
 
-	public List<UserRoleEntity> getUserRoles() {
-		return userRoles;
-	}
-
-	public void setUserRoles(List<UserRoleEntity> userRoles) {
-		this.userRoles = userRoles;
-	}
+	
     
 }

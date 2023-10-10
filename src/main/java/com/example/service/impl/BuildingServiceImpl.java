@@ -7,14 +7,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.model.response.BuildingSearchResponse;
-import com.example.repository.BuildingRepository;
+import com.example.repository.BuildingJdbc;
 import com.example.repository.entity.BuildingEntity;
 import com.example.service.BuildingService;
 
 @Service
 public class BuildingServiceImpl implements BuildingService {
 	@Autowired
-	private BuildingRepository buildingRepository;
+	private BuildingJdbc buildingRepository;
 
 	@Override
 	public List<BuildingSearchResponse> findAll() {
