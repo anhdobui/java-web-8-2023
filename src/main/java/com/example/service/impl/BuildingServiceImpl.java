@@ -8,17 +8,22 @@ import org.springframework.stereotype.Service;
 
 import com.example.model.response.BuildingSearchResponse;
 import com.example.repository.BuildingJdbc;
+import com.example.repository.BuildingRepository;
 import com.example.repository.entity.BuildingEntity;
 import com.example.service.BuildingService;
 
 @Service
 public class BuildingServiceImpl implements BuildingService {
 	@Autowired
-	private BuildingJdbc buildingRepository;
+	private BuildingJdbc buildingJdbc;
+	
+	@Autowired
+	private BuildingRepository buildingRepository;
 
 	@Override
 	public List<BuildingSearchResponse> findAll() {
 		List<BuildingSearchResponse> results = new ArrayList<>();
+//		List<BuildingEntity> buildingEntitis = buildingJdbc.findAll();
 		List<BuildingEntity> buildingEntitis = buildingRepository.findAll();
 		for(BuildingEntity item: buildingEntitis) {
 			BuildingSearchResponse buildingSearchResponse = new BuildingSearchResponse();
