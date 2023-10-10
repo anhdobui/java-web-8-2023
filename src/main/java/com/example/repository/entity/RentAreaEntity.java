@@ -22,7 +22,7 @@ public class RentAreaEntity {
 	private Integer value;
 
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
     @JoinColumn(name = "buildingid")
     private BuildingEntity building;
    

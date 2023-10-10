@@ -10,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -22,6 +23,17 @@ public class RoleEntity  {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
+	@Column(nullable = false)
+    private String name;
+
+    @Column(unique = true, nullable = false)
+    private String code;
+    
+    @OneToMany(mappedBy = "role")
+	private List<UserRoleEntity> userRoles = new ArrayList<>();
+    
+//    @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY)
+//    private List<UserEntity> users = new ArrayList<>();
     public Long getId() {
 		return id;
 	}
@@ -29,16 +41,7 @@ public class RoleEntity  {
 	public void setId(Long id) {
 		this.id = id;
 	}
-
-	@Column(nullable = false)
-    private String name;
-
-    @Column(unique = true, nullable = false)
-    private String code;
-
-    @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY)
-    private List<UserEntity> users = new ArrayList<>();
-
+	
     public String getName() {
         return name;
     }
@@ -55,11 +58,20 @@ public class RoleEntity  {
         this.code = code;
     }
 
-    public List<UserEntity> getUsers() {
-        return users;
-    }
+	public List<UserRoleEntity> getUserRoles() {
+		return userRoles;
+	}
 
-    public void setUsers(List<UserEntity> users) {
-        this.users = users;
-    }
+	public void setUserRoles(List<UserRoleEntity> userRoles) {
+		this.userRoles = userRoles;
+	}
+
+//    public List<UserEntity> getUsers() {
+//        return users;
+//    }
+//
+//    public void setUsers(List<UserEntity> users) {
+//        this.users = users;
+//    }
+    
 }
