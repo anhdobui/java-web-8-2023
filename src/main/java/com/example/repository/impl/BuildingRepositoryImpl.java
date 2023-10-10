@@ -19,8 +19,14 @@ public class BuildingRepositoryImpl implements BuildingRepository{
 
 	@Override
 	public List<BuildingEntity> findAll() {
-		String sql = "FROM BuildingEntity";
-		Query query = entityManager.createQuery(sql, BuildingEntity.class);
+//		JPQL
+//		String sql = "FROM BuildingEntity";
+		
+//		Query query = entityManager.createQuery(sql, BuildingEntity.class);
+		
+//		SQL native
+		String sql = "select * from building";
+		Query query = entityManager.createNativeQuery(sql, BuildingEntity.class);
 		return query.getResultList();
 	}
 	
