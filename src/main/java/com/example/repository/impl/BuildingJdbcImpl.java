@@ -13,11 +13,13 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Repository;
 
 import com.example.repository.BuildingJdbc;
+import com.example.repository.BuildingRepository;
 import com.example.repository.entity.BuildingEntity;
 
 @Repository
 @PropertySource("classpath:application.properties")
-public class BuildingJdbcImpl implements BuildingJdbc {
+//public class BuildingJdbcImpl implements BuildingJdbc {
+public class BuildingJdbcImpl implements BuildingRepository {
 	/*
 	 * private final String DB_URL = "jdbc:mysql://localhost:3306/estatebasic";
 	 * private final String USER = "root";

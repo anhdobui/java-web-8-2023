@@ -14,8 +14,8 @@ import com.example.service.BuildingService;
 
 @Service
 public class BuildingServiceImpl implements BuildingService {
-	@Autowired
-	private BuildingJdbc buildingJdbc;
+//	@Autowired
+//	private BuildingJdbc buildingJdbc;
 	
 	@Autowired
 	private BuildingRepository buildingRepository;
