@@ -1,6 +1,7 @@
 package com.example.api;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,10 +27,10 @@ public class BuildingApi {
 	@Autowired 
 	private BuildingService buildingService;
 	
-	
 	@GetMapping
-	public  List<BuildingSearchResponse> findAll(@RequestParam( name = "name",required = false) String name,@RequestParam(name = "numberofbasement" ,required = false) Integer numberofbasement) {
-		List<BuildingSearchResponse> results = buildingService.findAll();
+	public  List<BuildingSearchResponse> findAll(@RequestParam(required = false) Map<String, Object> params,
+			 										@RequestParam(name = "types" ,required = false) List<String> types) {
+		List<BuildingSearchResponse> results = buildingService.findAll(params,types);
 		return results;
 	}
 	@GetMapping(value = "/{buildingId}")

@@ -1,6 +1,7 @@
 package com.example.repository.custom;
 
 import java.util.List;
+import java.util.Map;
 
 import com.example.repository.entity.BuildingEntity;
 
@@ -9,4 +10,5 @@ public interface BuildingRepositoryCustom {
 //	BuildingEntity findById(Long id);
 //	void save(BuildingEntity newBuilding);
 //	void delete(BuildingEntity newBuilding);
+	List<BuildingEntity> findAll(Map<String, Object> params, List<String> types);
 }

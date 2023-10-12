@@ -2,6 +2,7 @@ package com.example.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
@@ -37,9 +38,9 @@ public class BuildingServiceImpl implements BuildingService {
 	
 
 	@Override
-	public List<BuildingSearchResponse> findAll() {
+	public List<BuildingSearchResponse> findAll(Map<String, Object> params, List<String> types) {
 		List<BuildingSearchResponse> results = new ArrayList<>();
-		List<BuildingEntity> buildingEntitis = buildingRepository.findAll();
+		List<BuildingEntity> buildingEntitis = buildingRepository.findAll(params,types);
 //		List<BuildingEntity> buildingEntitis = buildingJdbc.findAll();
 //		List<BuildingEntity> buildingEntitis = buildingRepository.findAll();
 		for(BuildingEntity item: buildingEntitis) {
