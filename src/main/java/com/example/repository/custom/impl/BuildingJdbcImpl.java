@@ -1,4 +1,4 @@
-package com.example.repository.impl;
+package com.example.repository.custom.impl;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -12,8 +12,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Repository;
 
-import com.example.repository.BuildingJdbc;
-import com.example.repository.BuildingRepository;
+import com.example.repository.custom.BuildingJdbc;
+import com.example.repository.custom.BuildingRepositoryCustom;
 import com.example.repository.entity.BuildingEntity;
 
 @Repository

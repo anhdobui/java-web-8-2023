@@ -2,9 +2,12 @@ package com.example.repository;
 
 import java.util.List;
 
-import com.example.repository.entity.BuildingEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface BuildingRepository {
-	List<BuildingEntity> findAll();
-	BuildingEntity findById(Long id);
+import com.example.repository.custom.BuildingRepositoryCustom;
+import com.example.repository.entity.BuildingEntity;
+import com.example.repository.entity.RentAreaEntity;
+
+public interface BuildingRepository extends JpaRepository<BuildingEntity, Long>,BuildingRepositoryCustom {
+	
 }

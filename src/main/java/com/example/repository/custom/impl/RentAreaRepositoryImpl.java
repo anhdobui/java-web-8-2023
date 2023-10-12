@@ -1,4 +1,4 @@
-package com.example.repository.impl;
+package com.example.repository.custom.impl;
 
 import java.util.List;
 
@@ -8,11 +8,11 @@ import javax.persistence.Query;
 
 import org.springframework.stereotype.Repository;
 
-import com.example.repository.RentAreaRepository;
+import com.example.repository.custom.RentAreaRepositoryCustom;
 import com.example.repository.entity.RentAreaEntity;
 
 @Repository
-public class RentAreaRepositoryImpl implements RentAreaRepository{
+public class RentAreaRepositoryImpl implements RentAreaRepositoryCustom{
 	
 	@PersistenceContext
 	private EntityManager entityManager;
