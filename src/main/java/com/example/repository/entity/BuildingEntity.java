@@ -27,8 +27,8 @@ public class BuildingEntity {
 	@Column
 	private String ward;
 	
-	@Column(name = "districtid")
-	private Long districtId;
+	@Column(name = "district")
+	private Long districtCode;
 	
 	@Column
 	private String name;
@@ -72,12 +72,15 @@ public class BuildingEntity {
 	public void setWard(String ward) {
 		this.ward = ward;
 	}
-	public Long getDistrictId() {
-		return districtId;
+	
+	public Long getDistrictCode() {
+		return districtCode;
 	}
-	public void setDistrictId(Long districtId) {
-		this.districtId = districtId;
+	
+	public void setDistrictCode(Long districtCode) {
+		this.districtCode = districtCode;
 	}
+	
 	public String getName() {
 		return name;
 	}

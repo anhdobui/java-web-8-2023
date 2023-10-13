@@ -45,7 +45,7 @@ public class BuildingJdbcImpl implements BuildingJdbc {
 		        	 BuildingEntity buildingEntity = new BuildingEntity();
 		        	 buildingEntity.setName(rs.getString("name"));
 		        	 buildingEntity.setStreet(rs.getString("street"));
-		        	 buildingEntity.setDistrictId(rs.getLong("districtid"));
+//		        	 buildingEntity.setDistrictId(rs.getLong("districtid"));
 		        	 buildingEntity.setWard(rs.getString("ward"));
 		        	 results.add(buildingEntity);
 		         }

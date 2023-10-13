@@ -12,7 +12,7 @@ public class MapUtils {
 				}else if(tClass.getTypeName().equals("java.lang.Integer")) {
 					obj = obj != "" ? Integer.valueOf(obj.toString()) : null;
 				}else if(tClass.getTypeName().equals("java.lang.String")) {
-					obj = obj.toString();
+					obj = obj.toString().equals("") ? null : obj.toString();
 				}
 				return tClass.cast(obj);
 			}
