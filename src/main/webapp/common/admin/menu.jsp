@@ -37,15 +37,15 @@
         <li class="">
             <a href="#" class="dropdown-toggle">
                 <i class="menu-icon fa fas fa-users"></i>
-                <span class="menu-text">QL tài khoản</span>
+                <span class="menu-text">QL tòa nhà</span>
                 <b class="arrow fa fa-angle-down"></b>
             </a>
             <b class="arrow"></b>
             <ul class="submenu">
                 <li class="">
-                    <a href='<c:url value='/admin/user-list'/>'>
+                    <a href='<c:url value='/admin/building-list'/>'>
                         <i class="menu-icon fa fa-caret-right"></i>
-                        DS tài khoản
+                        DS tòa nhà
                     </a>
                     <b class="arrow"></b>
                 </li>

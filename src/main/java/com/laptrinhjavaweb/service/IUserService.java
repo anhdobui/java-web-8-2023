@@ -5,7 +5,9 @@ import com.laptrinhjavaweb.dto.UserDTO;
 import com.laptrinhjavaweb.exception.MyException;
 import org.springframework.data.domain.Pageable;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public interface IUserService {
     UserDTO findOneByUserNameAndStatus(String name, int status);
@@ -19,4 +21,6 @@ public interface IUserService {
     UserDTO resetPassword(long id);
     UserDTO updateProfileOfUser(String id, UserDTO userDTO);
     void delete(long[] ids);
+    Map<Long,String> getStaffMaps();
+
 }
