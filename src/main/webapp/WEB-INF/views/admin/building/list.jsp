@@ -230,11 +230,11 @@
                         <tr>
                             <th></th>
                             <th>Tên tòa nhà</th>
-                            <th>Số tầng hầm</th>
                             <th>Địa chỉ</th>
                             <th>Tên quản lý</th>
-                            <th>Số điện thoại</th>
-                            <th>Diện tích sàn</th>
+                            <th>Số tầng hầm</th>
+                            <th>D.T sàn</th>
+                            <th>D.T thuê</th>
                             <th>Giá thuê</th>
                             <th>Phí dịch vụ</th>
                             <th>Thao tác</th>
@@ -245,13 +245,13 @@
                             <tr>
                                 <td><input type="checkbox" value="4" id="checkbox_4" /></td>
                                 <td>${item.name}</td>
+                                <td>${item.address}</td>
+                                <td>${item.managerName}</td>
                                 <td>${item.numberOfBasement}</td>
-                                <td>$45</td>
-                                <td>$45</td>
-                                <td>$45</td>
-                                <td>$45</td>
-                                <td>$45</td>
-                                <td>$45</td>
+                                <td>${item.floorArea}</td>
+                                <td>${item.rentArea}</td>
+                                <td>${item.rentPrice}</td>
+                                <td>${item.serviceFee}</td>
                                 <td>
                                     <button
                                             class="btn btn-xs btn-info"

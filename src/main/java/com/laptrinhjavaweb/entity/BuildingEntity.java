@@ -26,10 +26,16 @@ public class BuildingEntity extends BaseEntity {
     private String level;
     @Column(name="floorarea")
     private Integer floorArea;
+    @Column(name = "managername")
+    private String managerName;
+    @Column(name = "managerphone")
+    private String managerPhone;
     @Column(name="rentprice")
     private Integer rentPrice;
     @Column(name="rentpricedescription")
     private String rentPriceDescription;
+    @Column(name = "servicefee")
+    private String serviceFee;
     @Column(name="type")
     private String type;
 
@@ -144,4 +150,27 @@ public class BuildingEntity extends BaseEntity {
         this.assignmentBuildings = assignmentBuildings;
     }
 
+    public String getManagerName() {
+        return managerName;
+    }
+
+    public void setManagerName(String managerName) {
+        this.managerName = managerName;
+    }
+
+    public String getManagerPhone() {
+        return managerPhone;
+    }
+
+    public void setManagerPhone(String managerPhone) {
+        this.managerPhone = managerPhone;
+    }
+
+    public String getServiceFee() {
+        return serviceFee;
+    }
+
+    public void setServiceFee(String serviceFee) {
+        this.serviceFee = serviceFee;
+    }
 }

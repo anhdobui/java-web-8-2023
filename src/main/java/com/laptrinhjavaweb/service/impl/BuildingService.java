@@ -3,8 +3,10 @@ package com.laptrinhjavaweb.service.impl;
 import com.laptrinhjavaweb.converter.BuildingConverter;
 import com.laptrinhjavaweb.dto.BuildingDTO;
 import com.laptrinhjavaweb.entity.BuildingEntity;
+import com.laptrinhjavaweb.entity.RentAreaEntity;
 import com.laptrinhjavaweb.entity.UserEntity;
 import com.laptrinhjavaweb.repository.BuildingRepository;
+import com.laptrinhjavaweb.repository.RentAreaRepository;
 import com.laptrinhjavaweb.repository.UserRepository;
 import com.laptrinhjavaweb.service.IBuildingService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +24,7 @@ public class BuildingService implements IBuildingService {
     private BuildingRepository buildingRepository;
 
     @Autowired
-    private UserRepository userRepository;
+    private RentAreaRepository rentAreaRepository;
 
     @Autowired
     private BuildingConverter buildingConverter;
@@ -31,8 +33,10 @@ public class BuildingService implements IBuildingService {
     public List<BuildingDTO> findAll() {
         List<BuildingDTO> result = new ArrayList<>();
         List<BuildingEntity> entities = buildingRepository.findAll();
+
         for (BuildingEntity item:entities){
-            BuildingDTO buildingDTO = buildingConverter.convertToDto(item);
+            List<RentAreaEntity> rentAreaEntities = rentAreaRepository.findByBuildingId(item.getId());
+            BuildingDTO buildingDTO = buildingConverter.convertToDto(item,rentAreaEntities);
             result.add(buildingDTO);
         }
         return result;
