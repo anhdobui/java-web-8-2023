@@ -25,6 +25,13 @@ public class UserEntity extends BaseEntity {
     @Column(name = "email", unique = true)
     private String email;
 
+    @OneToMany(mappedBy = "staff")
+    private List<AssignmentCustomerEntity> assignmentCustomers;
+
+
+    @OneToMany(mappedBy = "staff")
+    private List<AssignmentBuildingEntity> assignmentBuildings;
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_role",
             joinColumns = @JoinColumn(name = "user_id", nullable = false),
@@ -78,4 +85,23 @@ public class UserEntity extends BaseEntity {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    public List<AssignmentCustomerEntity> getAssignmentCustomers() {
+        return assignmentCustomers;
+    }
+
+    public void setAssignmentCustomers(
+        List<AssignmentCustomerEntity> assignmentCustomers) {
+        this.assignmentCustomers = assignmentCustomers;
+    }
+
+    public List<AssignmentBuildingEntity> getAssignmentBuildings() {
+        return assignmentBuildings;
+    }
+
+    public void setAssignmentBuildings(
+        List<AssignmentBuildingEntity> assignmentBuildings) {
+        this.assignmentBuildings = assignmentBuildings;
+    }
+
 }
