@@ -3,6 +3,7 @@ package com.laptrinhjavaweb.converter;
 import com.laptrinhjavaweb.dto.BuildingDTO;
 import com.laptrinhjavaweb.entity.BuildingEntity;
 import com.laptrinhjavaweb.entity.RentAreaEntity;
+import com.laptrinhjavaweb.enumDefine.DistrictEnum;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -21,8 +22,9 @@ public class BuildingConverter {
         StringBuilder address = new StringBuilder("");
         address.append(entity.getStreet()!=null? entity.getStreet()+"-":"");
         address.append(entity.getWard()!=null? entity.getWard()+"-":"");
-        address.append(entity.getDistrict()!=null? entity.getDistrict():"");
+        address.append(entity.getDistrict()!=null? DistrictEnum.valueOf(entity.getDistrict()).getName():"");
         result.setAddress(address.toString());
+
         String rentareaStr = rentAreaEntities.stream().map(item -> item.getValue().toString()).collect(Collectors.joining(","));
         result.setRentArea(rentareaStr);
         return result;

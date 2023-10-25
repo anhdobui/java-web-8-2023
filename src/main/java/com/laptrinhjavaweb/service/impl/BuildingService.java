@@ -1,22 +1,22 @@
 package com.laptrinhjavaweb.service.impl;
 
+import com.laptrinhjavaweb.builder.BuildingSearchBuilder;
 import com.laptrinhjavaweb.converter.BuildingConverter;
 import com.laptrinhjavaweb.dto.BuildingDTO;
+import com.laptrinhjavaweb.dto.BuildingSearchDTO;
 import com.laptrinhjavaweb.entity.BuildingEntity;
 import com.laptrinhjavaweb.entity.RentAreaEntity;
-import com.laptrinhjavaweb.entity.UserEntity;
+import com.laptrinhjavaweb.enumDefine.DistrictEnum;
+import com.laptrinhjavaweb.enumDefine.TypeEnum;
 import com.laptrinhjavaweb.repository.BuildingRepository;
 import com.laptrinhjavaweb.repository.RentAreaRepository;
-import com.laptrinhjavaweb.repository.UserRepository;
 import com.laptrinhjavaweb.service.IBuildingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.lang.reflect.Field;
+import java.util.*;
 
 @Service
 public class BuildingService implements IBuildingService {
@@ -39,6 +39,59 @@ public class BuildingService implements IBuildingService {
             BuildingDTO buildingDTO = buildingConverter.convertToDto(item,rentAreaEntities);
             result.add(buildingDTO);
         }
+        return result;
+    }
+
+    @Override
+    public List<BuildingDTO> findBuilding(BuildingSearchDTO buildingserch) {
+        List<BuildingDTO> result = new ArrayList<>();
+        BuildingSearchBuilder buildingSearchBuilder = convertToBuildingSearchBuilder(buildingserch);
+        List<BuildingEntity> buildingEntities = buildingRepository.findBuilding(buildingSearchBuilder);
+        buildingEntities.stream().forEach(item -> {
+            List<RentAreaEntity> areaEntities = rentAreaRepository.findByBuildingId(item.getId());
+            BuildingDTO buildingDTO = buildingConverter.convertToDto(item,areaEntities);
+            result.add(buildingDTO);
+        });
+        return result;
+    }
+
+    @Override
+    public Map<DistrictEnum, String> getDistricMaps() {
+        Map<DistrictEnum, String> result = new LinkedHashMap<>();
+        for (DistrictEnum district : DistrictEnum.values()) {
+            result.put(district,district.getName());
+        }
+        return result;
+    }
+
+    @Override
+    public Map<TypeEnum, String> getTypeMaps() {
+        Map<TypeEnum, String> result = new LinkedHashMap<>();
+        for (TypeEnum type : TypeEnum.values()) {
+            result.put(type,type.getName());
+        }
+        return result;
+    }
+
+    private BuildingSearchBuilder convertToBuildingSearchBuilder(BuildingSearchDTO buildingserch) {
+        BuildingSearchBuilder result = new BuildingSearchBuilder.Builder()
+                .setName(buildingserch.getName())
+                .setFloorArea(buildingserch.getFloorArea())
+                .setWard(buildingserch.getWard())
+                .setStreet(buildingserch.getStreet())
+                .setDistrictCode(buildingserch.getDistrictCode())
+                .setDirection(buildingserch.getDirection())
+                .setLevel(buildingserch.getLevel())
+                .setManagerName(buildingserch.getManagerName())
+                .setManagerPhone(buildingserch.getManagerPhone())
+                .setNumberOfBasement(buildingserch.getNumberOfBasement())
+                .setRentAreaFrom(buildingserch.getRentAreaFrom())
+                .setRentAreaTo(buildingserch.getRentAreaTo())
+                .setCostRentFrom(buildingserch.getCostRentFrom())
+                .setCostRentTo(buildingserch.getCostRentTo())
+                .setTypes(buildingserch.getTypes())
+                .setStaffId(buildingserch.getStaffId())
+                .build();
         return result;
     }
 

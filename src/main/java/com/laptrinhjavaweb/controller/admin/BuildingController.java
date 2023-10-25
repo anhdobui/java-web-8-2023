@@ -2,6 +2,7 @@ package com.laptrinhjavaweb.controller.admin;
 
 import com.laptrinhjavaweb.dto.BuildingDTO;
 
+import com.laptrinhjavaweb.dto.BuildingSearchDTO;
 import com.laptrinhjavaweb.service.IBuildingService;
 import com.laptrinhjavaweb.service.IUserService;
 import com.laptrinhjavaweb.service.impl.BuildingService;
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.Map;
+
 @Controller(value = "buildingControllerOfAdmin")
 public class BuildingController {
 
@@ -21,10 +24,12 @@ public class BuildingController {
     private IUserService userService;
 
     @RequestMapping(value = "/admin/building-list", method = RequestMethod.GET)
-    public ModelAndView buildingList(@ModelAttribute("modelSearch") BuildingDTO buildingDTO){
+    public ModelAndView buildingList(@ModelAttribute("modelSearch") BuildingSearchDTO buildingSearch){
         ModelAndView mav = new ModelAndView("admin/building/list");
-        mav.addObject("modelSearch",buildingDTO);
-        mav.addObject("buildings",buildingService.findAll());
+        mav.addObject("modelSearch",buildingSearch);
+        mav.addObject("buildings",buildingService.findBuilding(buildingSearch));
+        mav.addObject("districtmaps",buildingService.getDistricMaps());
+        mav.addObject("typemaps",buildingService.getTypeMaps());
         mav.addObject("staffmaps",userService.getStaffMaps());
         return mav;
     }

@@ -70,20 +70,17 @@
                                             <form:input path="name" cssClass="form-control" />
                                         </div>
                                         <div class="col-sm-6">
-                                            <label for="area">Diện tích sàn</label>
-                                            <input type="text" id="area" placeholder="" class="form-control" />
+                                            <label for="floorArea">Diện tích sàn</label>
+                                            <form:input path="floorArea" type="number" cssClass="form-control" />
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-sm-4">
-                                            <label for="district">Quận hiện có</label>
-                                            <select class="form-control" id="district">
-                                                <option value="">---Chọn quận---</option>
-                                                <option value="Q1">Quận 1</option>
-                                                <option value="Q2">Quận 2</option>
-                                                <option value="Q3">Quận 3</option>
-                                                <option value="Q4">Quận 4</option>
-                                            </select>
+                                            <label for="districtCode">Quận hiện có</label>
+                                            <form:select path="districtCode" cssClass="form-control" >
+                                                <form:option value="-1" label="---Chọn quận---" />
+                                                <form:options items="${districtmaps}" />
+                                            </form:select>
                                         </div>
                                         <div class="col-sm-4">
                                             <label for="ward">Phường</label>
@@ -97,76 +94,53 @@
                                     <div class="row">
                                         <div class="col-sm-4">
                                             <label for="numberOfBasement">Số tầng hầm</label>
-                                            <input type="number" id="numberOfBasement" class="form-control" />
+                                            <form:input type="number" path="numberOfBasement" cssClass="form-control" />
                                         </div>
                                         <div class="col-sm-4">
                                             <label for="direction">Hướng</label>
-                                            <input type="number" id="direction" class="form-control" />
+                                            <form:input path="direction" cssClass="form-control" />
                                         </div>
                                         <div class="col-sm-4">
                                             <label for="level">Hạng</label>
-                                            <input type="number" id="level" class="form-control" />
+                                            <form:input path="level" cssClass="form-control" />
                                         </div>
                                     </div>
 
                                     <div class="row">
                                         <div class="col-sm-3">
                                             <div>
-                                                <label for="areaRentFrom">Diện tích từ</label>
-                                                <input
-                                                        type="number"
-                                                        id="areaRentFrom"
-                                                        placeholder=""
-                                                        class="form-control"
-                                                        name="areaRentFrom"
-                                                />
+                                                <label for="rentAreaFrom">Diện tích từ</label>
+                                                <form:input path="rentAreaFrom" type="number" cssClass="form-control" />
                                             </div>
                                         </div>
                                         <div class="col-sm-3">
                                             <div>
-                                                <label for="areaRentTo">Diện tích đến</label>
-                                                <input
-                                                        type="number"
-                                                        id="areaRentTo"
-                                                        placeholder=""
-                                                        class="form-control"
-                                                        name="areaRentTo"
-                                                />
+                                                <label for="rentAreaTo">Diện tích đến</label>
+                                                <form:input path="rentAreaTo" type="number" cssClass="form-control" />
                                             </div>
                                         </div>
                                         <div class="col-sm-3">
                                             <div>
                                                 <label for="costRentFrom">Giá thuê từ</label>
-                                                <input
-                                                        type="number"
-                                                        id="costRentFrom"
-                                                        placeholder=""
-                                                        class="form-control"
-                                                        name="costRentFrom"
-                                                />
+                                                <form:input path="costRentFrom" type="number" cssClass="form-control" />
+
                                             </div>
                                         </div>
                                         <div class="col-sm-3">
                                             <div>
                                                 <label for="costRentTo">Giá thuê đến</label>
-                                                <input
-                                                        type="number"
-                                                        id="costRentTo"
-                                                        placeholder=""
-                                                        class="form-control"
-                                                        name="costRentTo"
-                                                />
+                                                <form:input path="costRentTo" type="number" cssClass="form-control" />
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-sm-4">
                                             <label for="managerName">Tên quản lý</label>
-                                            <input type="text" id="managerName" class="form-control" />
+                                            <form:input path="managerName" cssClass="form-control" />
                                         </div>
                                         <div class="col-sm-4">
                                             <label for="managerPhone">Điện thoại quản lý</label>
-                                            <input type="text" id="managerPhone" class="form-control" />
+                                            <form:input path="managerPhone" cssClass="form-control" />
                                         </div>
                                         <div class="col-sm-3">
                                             <label for="staffId">Chọn nhân viên phụ trách</label>
@@ -177,20 +151,18 @@
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="checkbox">
-                                            <label for="">
-                                                <input type="checkbox" class="ace" name="form-field-checkbox" />
-                                                <span class="lbl">Tầng trệt</span>
-                                            </label>
-                                            <label for="">
-                                                <input type="checkbox" class="ace" name="form-field-checkbox" />
-                                                <span class="lbl">Nguyên căn</span>
-                                            </label>
-                                            <label for="">
-                                                <input type="checkbox" class="ace" name="form-field-checkbox" />
-                                                <span class="lbl">Nội thất</span>
-                                            </label>
-                                        </div>
+                                        <div></div>
+                                        <div class="col-sm-11">
+                                            <div class="checkbox">
+                                                <c:forEach var="type" items="${typemaps}">
+                                                    <label for="${type.key}">
+                                                        <form:checkbox id="${type.key}" path="types" value="${type.key}" />
+                                                        <span class="lbl">${type.value}</span>
+                                                    </label>
+                                                </c:forEach>
+                                            </div>
+                                            </div>
+
                                     </div>
                                     <div class="row">
                                         <div class="col-sm-12">
