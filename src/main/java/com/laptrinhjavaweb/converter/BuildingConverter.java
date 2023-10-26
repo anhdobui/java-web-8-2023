@@ -22,7 +22,7 @@ public class BuildingConverter {
         StringBuilder address = new StringBuilder("");
         address.append(entity.getStreet()!=null? entity.getStreet()+"-":"");
         address.append(entity.getWard()!=null? entity.getWard()+"-":"");
-        address.append(entity.getDistrict()!=null? DistrictEnum.valueOf(entity.getDistrict()).getName():"");
+        address.append(entity.getDistrictCode()!=null? DistrictEnum.valueOf(entity.getDistrictCode()).getName():"");
         result.setAddress(address.toString());
 
         String rentareaStr = rentAreaEntities.stream().map(item -> item.getValue().toString()).collect(Collectors.joining(","));

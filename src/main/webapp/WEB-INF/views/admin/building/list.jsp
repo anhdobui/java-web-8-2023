@@ -179,9 +179,9 @@
             <div class="row">
                 <div class="col-xs-12">
                     <div class="pull-right">
-                        <button class="btn btn-white btn-info btn-bold" data-toggle="tooltip" title="Thêm tòa nhà">
+                        <a href="/admin/building-edit" class="btn btn-white btn-info btn-bold" data-toggle="tooltip" title="Thêm tòa nhà">
                             <i class="fa fa-plus-circle"></i>
-                        </button>
+                        </a>
                         <button
                                 class="btn btn-white btn-warning btn-bold"
                                 data-toggle="tooltip"

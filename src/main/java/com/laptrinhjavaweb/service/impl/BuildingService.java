@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.Field;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class BuildingService implements IBuildingService {
@@ -99,6 +100,30 @@ public class BuildingService implements IBuildingService {
     @Transactional
     public void save(BuildingDTO buildingDTO) {
         BuildingEntity buildingEntity = buildingConverter.convertToEntity(buildingDTO);
-        buildingRepository.save(buildingEntity);
+        BuildingEntity newBuildingEntity =  buildingRepository.save(buildingEntity);
+        List<RentAreaEntity> rentAreaEntities = handleStrValuesToListRentAreaEntity(buildingDTO.getRentArea(),newBuildingEntity);
+        rentAreaEntities.stream().forEach(rentAreaEntity -> {
+            rentAreaRepository.save(rentAreaEntity);
+        });
+    }
+
+    private List<RentAreaEntity> handleStrValuesToListRentAreaEntity(String strValues,BuildingEntity newBuildingEntity) {
+        List<Integer> listRentareaForBuilding = Arrays.stream(strValues.split(","))
+                .map(area -> {
+                    try {
+                        return Integer.parseInt(area.trim());
+                    } catch (NumberFormatException e) {
+                        return null;
+                    }
+                })
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+        List<RentAreaEntity> result = listRentareaForBuilding.stream().map(item -> {
+            RentAreaEntity rentAreaEntity = new RentAreaEntity();
+            rentAreaEntity.setValue(item);
+            rentAreaEntity.setBuilding(newBuildingEntity);
+            return rentAreaEntity;
+        }).collect(Collectors.toList());
+        return result;
     }
 }

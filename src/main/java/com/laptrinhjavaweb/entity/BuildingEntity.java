@@ -17,7 +17,7 @@ public class BuildingEntity extends BaseEntity {
     @Column(name="ward")
     private  String ward;
     @Column(name="district")
-    private String district;
+    private String districtCode;
     @Column(name="numberofbasement")
     private Integer numberOfBasement;
     @Column(name="direction")
@@ -77,12 +77,12 @@ public class BuildingEntity extends BaseEntity {
         this.ward = ward;
     }
 
-    public String getDistrict() {
-        return district;
+    public String getDistrictCode() {
+        return districtCode;
     }
 
-    public void setDistrict(String district) {
-        this.district = district;
+    public void setDistrictCode(String districtCode) {
+        this.districtCode = districtCode;
     }
 
     public Integer getNumberOfBasement() {

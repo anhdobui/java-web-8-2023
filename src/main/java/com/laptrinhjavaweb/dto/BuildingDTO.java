@@ -9,7 +9,7 @@ public class BuildingDTO {
     private Long staffId;
     private Integer floorArea;
     private Integer numberOfBasement;
-    private String district;
+    private String districtCode;
     private String direction;
     private String level;
     private String managerName;
@@ -84,12 +84,12 @@ public class BuildingDTO {
         this.numberOfBasement = numberOfBasement;
     }
 
-    public String getDistrict() {
-        return district;
+    public String getDistrictCode() {
+        return districtCode;
     }
 
-    public void setDistrict(String district) {
-        this.district = district;
+    public void setDistrictCode(String districtCode) {
+        this.districtCode = districtCode;
     }
 
     public String getDirection() {
