@@ -9,6 +9,7 @@
 <%@include file="/common/taglib.jsp"%>
 <c:url var="buildingListURL" value="/admin/building-list" />
 <c:url var="loadStaffAPI" value="/api/building" />
+<c:url var="baseAPI" value="/api/building" />
 <html>
 <head>
     <title>Danh sách tòa nhà</title>
@@ -50,11 +51,10 @@
             <!-- /.page-header -->
             <div class="row">
                 <div class="col-xs-12">
-                    <div class="alert alert-block alert-success text-left hidden" id="toast-message">
+                    <div class="alert alert-block text-left hidden" id="toast-message">
                         <button type="button" class="close" data-dismiss="alert">
                             <i class="ace-icon fa fa-times"></i>
                         </button>
-                        <i class="ace-icon fa fa-check green"></i>
                         <span id="text-message"></span>
                     </div>
                 </div>
@@ -225,7 +225,7 @@
                         <tbody>
                         <c:forEach var="item" items="${buildings}">
                             <tr>
-                                <td><input type="checkbox" value="4" id="checkbox_4" /></td>
+                                <td><input type="checkbox" value="${item.id}" class="cb-building-js-handle" id="cb_buildingid_${item.id}" /></td>
                                 <td>${item.name}</td>
                                 <td>${item.address}</td>
                                 <td>${item.managerName}</td>
@@ -294,6 +294,41 @@
         </div>
     </div>
 </div>
+<div id="deleteModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Xác nhận xóa tòa nhà</h4>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-warning">
+                    Bạn có chắc chắn muốn xóa những tòa nhà đã chọn
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-yellow " id="btnComfirmRemoveBuilding" data-dismiss="modal">Xóa</button>
+                <button type="button" class="btn btn-light" data-dismiss="modal">Hủy</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function showToast(message,status){
+        var toastElm = $("#toast-message").removeClass("hidden")
+        toastElm.addClass("alert-"+status)
+        $("#text-message").text(message)
+    }
+    function loadMessageinLocalSt(name){
+        var message = localStorage.getItem(name);
+        var satus = name == "messageSuccess" ?  "success":"danger"
+        message && showToast(message,satus)
+        message && localStorage.removeItem(name)
+    }
+    loadMessageinLocalSt("messageSuccess")
+    loadMessageinLocalSt("messageDanger")
+</script>
 <script>
     function assignmentBuilding() {
         openModalAssignmentBuilding();
@@ -315,8 +350,23 @@
                 $('#staffList tbody').html(row);
             },
             error:function (response) {
-                console.log("failed")
+                showToast("Đã có lỗi xảy ra","danger")
                 console.log(response)
+            }
+        })
+    }
+    function removeBuilding(ids){
+        $.ajax({
+            type:'DELETE',
+            url:'${baseAPI}',
+            data:JSON.stringify(ids),
+            contentType: 'application/json',
+            success:function (response) {
+                localStorage.setItem("messageSuccess", "Đã xóa thành công "+ids.length+" tòa nhà");
+                location.reload();
+            },
+            error:function (response) {
+                localStorage.setItem("messageDanger", "Đã có lỗi xảy ra");
             }
         })
     }
@@ -328,15 +378,26 @@
         e.preventDefault()
         $('#listForm').submit()
     })
+    $("#btnDeleteBuilding").click(function (e){
+        var listChecked = $(".cb-building-js-handle:checked")
+
+            if(listChecked.size()){
+                $("#deleteModal").modal()
+                var ids_remove = []
+                listChecked.each(function() {
+                    var value = $(this).val();
+                    ids_remove.push(value)
+                });
+                $("#btnComfirmRemoveBuilding").click(function (e){
+                    removeBuilding(ids_remove)
+                    setTimeout(function() {
+                        location.reload(true);
+                    },800)
+                })
+
+            }
+    })
 </script>
-<script>
-    function showSuccessToast(message){
-        $("#toast-message").removeClass("hidden")
-        $("#text-message").text(message)
-    }
-    var toastMessage = localStorage.getItem("messageSuccess");
-    toastMessage && showSuccessToast(toastMessage)
-    localStorage.removeItem("messageSuccess")
-</script>
+
 </body>
 </html>

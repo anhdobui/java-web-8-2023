@@ -14,5 +14,6 @@ public interface IBuildingService {
 	Map<DistrictEnum,String> getDistricMaps();
 	Map<TypeEnum,String> getTypeMaps();
 	void save(BuildingDTO buildingDTO);
+	void delete(List<Long> ids);
 
 }

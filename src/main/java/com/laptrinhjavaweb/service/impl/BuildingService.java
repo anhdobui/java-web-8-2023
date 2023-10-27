@@ -107,6 +107,19 @@ public class BuildingService implements IBuildingService {
         });
     }
 
+    @Override
+    @Transactional
+    public void delete(List<Long> ids) {
+        ids.stream().forEach(id -> {
+            List<RentAreaEntity> rentAreaEntities = rentAreaRepository.findByBuildingId(id);
+            rentAreaEntities.stream().forEach(item -> {
+                rentAreaRepository.delete(item);
+            });
+            buildingRepository.deleteById(id);
+        });
+
+    }
+
     private List<RentAreaEntity> handleStrValuesToListRentAreaEntity(String strValues,BuildingEntity newBuildingEntity) {
         List<Integer> listRentareaForBuilding = Arrays.stream(strValues.split(","))
                 .map(area -> {

@@ -22,6 +22,10 @@ public class BuildingAPI {
         buildingService.save(newBuilding);
         return newBuilding;
     }
+    @DeleteMapping
+    public void deleteBuildings(@RequestBody List<Long> ids){
+        buildingService.delete(ids);
+    }
 
     @GetMapping("/{buildingid}/staffs")
     public ResponseDTO loadStaff(){
