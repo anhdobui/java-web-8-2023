@@ -180,7 +180,8 @@
             dataType:"json",
             contentType:"application/json",
             success:function (response) {
-                console.log("success")
+                localStorage.setItem("messageSuccess", "Thêm mới tòa nhà thành công ");
+                window.location.href = "http://localhost:8080/admin/building-list";
             },
             error:function (response) {
                 console.log("failed")

@@ -48,7 +48,17 @@
                 </h1>
             </div>
             <!-- /.page-header -->
-
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="alert alert-block alert-success text-left hidden" id="toast-message">
+                        <button type="button" class="close" data-dismiss="alert">
+                            <i class="ace-icon fa fa-times"></i>
+                        </button>
+                        <i class="ace-icon fa fa-check green"></i>
+                        <span id="text-message"></span>
+                    </div>
+                </div>
+            </div>
             <div class="row">
                 <div class="col-xs-12">
                     <div class="widget-box">
@@ -318,6 +328,15 @@
         e.preventDefault()
         $('#listForm').submit()
     })
+</script>
+<script>
+    function showSuccessToast(message){
+        $("#toast-message").removeClass("hidden")
+        $("#text-message").text(message)
+    }
+    var toastMessage = localStorage.getItem("messageSuccess");
+    toastMessage && showSuccessToast(toastMessage)
+    localStorage.removeItem("messageSuccess")
 </script>
 </body>
 </html>
