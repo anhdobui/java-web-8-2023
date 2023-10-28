@@ -39,23 +39,25 @@
 
             <div class="row">
                 <div class="col-xs-12">
-                    <form class="form-horizontal" role="form" id="formEdit">
+                    <form:form modelAttribute ="buildingEdit" cssClass="form-horizontal" id="formEdit" method="GET">
                         <div class="form-group">
                             <label for="name" class="col-sm-3 control-label no-padding-right">Tên tòa nhà</label>
                             <div class="col-sm-9">
-                                <input type="text" id="name" name="name" value="" class="form-control" />
+                                <form:input path="name" type="text" cssClass="form-control" />
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="managerName" class="col-sm-3 control-label no-padding-right">Tên quản lý tòa nhà</label>
                             <div class="col-sm-9">
-                                <input type="text" id="managerName" name="managerName" value="" class="form-control" />
+                                <form:input path="managerName" type="text" cssClass="form-control" />
+
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="managerPhone" class="col-sm-3 control-label no-padding-right">Sdt quản lý tòa nhà</label>
                             <div class="col-sm-9">
-                                <input type="text" id="managerPhone" name="managerPhone" value="" class="form-control" />
+                                <form:input path="managerPhone" type="text" cssClass="form-control" />
+
                             </div>
                         </div>
                         <div class="form-group">
@@ -64,91 +66,106 @@
                                 <select class="form-control" name="districtCode" id="districtCode">
                                     <option value="">---Chọn quận---</option>
                                     <c:forEach var="entry" items="${districtmaps}">
-                                        <option value="${entry.key}">${entry.value}</option>
+                                        <option value="${entry.key}" ${buildingEdit.districtCode.equalsIgnoreCase(entry.key) ? "selected":""}>${entry.value}</option>
                                     </c:forEach>
+
                                 </select>
+
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="ward" class="col-sm-3 control-label no-padding-right">Phường</label>
                             <div class="col-sm-9">
-                                <input type="text" id="ward" name="ward" class="form-control" />
+                                <form:input path="ward" type="text" cssClass="form-control" />
+
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="street" class="col-sm-3 control-label no-padding-right">Đường</label>
                             <div class="col-sm-9">
-                                <input type="text" id="street" name="street" class="form-control" />
+                                <form:input path="street" type="text" cssClass="form-control" />
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label for="numberOfBasement" class="col-sm-3 control-label no-padding-right">Số tầng hầm</label>
                             <div class="col-sm-9">
-                                <input type="number" id="numberOfBasement" name="numberOfBasement" value="" class="form-control" />
+                                <form:input path="numberOfBasement" type="number" cssClass="form-control" />
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="floorArea" class="col-sm-3 control-label no-padding-right">Diện tích sàn</label>
                             <div class="col-sm-9">
-                                <input type="number" id="floorArea" name="floorArea" value="" class="form-control" />
+                                <form:input path="floorArea" type="number" cssClass="form-control" />
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="direction" class="col-sm-3 control-label no-padding-right">Hướng</label>
                             <div class="col-sm-9">
-                                <input type="text" id="direction" name="direction" value="" class="form-control" />
+                                <form:input path="direction" type="text" cssClass="form-control" />
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="level" class="col-sm-3 control-label no-padding-right">Hạng</label>
                             <div class="col-sm-9">
-                                <input type="text" id="level" name="level" value="" class="form-control" />
+                                <form:input path="level" type="text" cssClass="form-control" />
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="rentArea" class="col-sm-3 control-label no-padding-right">Diện tích thuê</label>
                             <div class="col-sm-9">
-                                <input type="text" placeholder="vd:100,200" id="rentArea" class="form-control" name="rentArea" />
+                                <form:input path="rentArea" placeholder="vd:100,200" type="text" cssClass="form-control" />
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="rentPrice" class="col-sm-3 control-label no-padding-right">Giá thuê</label>
                             <div class="col-sm-9">
-                                <input type="number" id="rentPrice" class="form-control" name="rentPrice" />
+                                <form:input path="rentPrice" type="number" cssClass="form-control" />
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="rentPriceDescription" class="col-sm-3 control-label no-padding-right">Mô tả giá thuê</label>
                             <div class="col-sm-9">
-                                <textarea type="text" id="rentPriceDescription" class="form-control" name="rentPriceDescription" ></textarea>
+                                <form:textarea path="rentPriceDescription" cssClass="form-control"></form:textarea>
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="serviceFee" class="col-sm-3 control-label no-padding-right">Phí dịch vụ</label>
                             <div class="col-sm-9">
-                                <input type="text" id="serviceFee" class="form-control" name="serviceFee" />
+                                <form:input path="serviceFee" type="text" cssClass="form-control" />
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-3 control-label no-padding-right">Loại tòa nhà</label>
                             <div class="col-sm-9">
                                 <c:forEach var="type" items="${typemaps}">
-                                    <label for="${type.key}" class="checkbox-inline"
-                                    ><input type="checkbox" value="${type.key}" id="${type.key}" name="type" />${type.value}</label
-                                    >
+                                    <label for="${type.key}" class="checkbox-inline">
+                                        <c:set var="isChecked" value="${fn:containsIgnoreCase(buildingEdit.type, type.key)}" />
+                                        <input type="checkbox" value="${type.key}" id="${type.key}" ${isChecked ? "checked":""} name="type" />
+                                            ${type.value}
+                                    </label>
                                 </c:forEach>
+
                             </div>
                         </div>
 
                         <div class="form-group">
                             <div class="col-sm-2"></div>
                             <div class="col-sm-9">
-                                <button type="button" class="btn btn-primary btn-bold" id="btnAddBuilding">Thêm tòa nhà</button>
+                                <c:choose>
+                                    <c:when test="${mode.equals('update')}">
+                                        <button type="button" class="btn btn-primary btn-bold" id="btnSendBuilding">Cập nhật tòa nhà</button>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <button type="button" class="btn btn-primary btn-bold" id="btnSendBuilding">Thêm mới tòa nhà</button>
+                                    </c:otherwise>
+                                </c:choose>
+
                                 <button type="button" class="btn btn-warning btn-bold">Hủy</button>
                             </div>
                         </div>
-                    </form>
+                    </form:form>
+
                 </div>
             </div>
         </div>
@@ -163,7 +180,7 @@
     function openModalAssignmentBuilding() {
         $("#assignmentBuildingModal").modal();
     }
-    $('#btnAddBuilding').click(function (e) {
+    $('#btnSendBuilding').click(function (e) {
         e.preventDefault()
 
         var data = {}
@@ -172,20 +189,25 @@
         $.each(formData,function (index,v) {
                 data[""+v.name+""] = !data[""+v.name+""] ? v.value:data[""+v.name+""]+","+ v.value;
         })
+        <c:if test="${mode.equals('update') && buildingEdit.id != null}">
+            if(${mode.equals("update")}){
+                data.id = ${buildingEdit.id}
+            }
+        </c:if>
+
         console.log(data)
         $.ajax({
-            type:'POST',
+            type: "${mode.equals("update") ? 'PUT':'POST' }",
             url:'${buildingApi}',
             data:JSON.stringify(data),
-            dataType:"json",
             contentType:"application/json",
             success:function (response) {
-                localStorage.setItem("messageSuccess", "Thêm mới tòa nhà thành công ");
-                window.location.href = "http://localhost:8080/admin/building-list";
+                localStorage.setItem("messageSuccess", "${mode.equals('update') ? "Cập nhật":"Thêm mới"} nhà thành công ");
+                window.location.href = "/admin/building-list";
             },
             error:function (response) {
-                console.log("failed")
-                console.log(response)
+                localStorage.setItem("messageDanger", "Đã có lỗi xảy ra");
+                window.location.href = "/admin/building-list";
             }
         })
     })

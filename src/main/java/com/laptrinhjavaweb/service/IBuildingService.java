@@ -13,6 +13,7 @@ public interface IBuildingService {
 	List<BuildingDTO> findBuilding(BuildingSearchDTO buildingserch);
 	Map<DistrictEnum,String> getDistricMaps();
 	Map<TypeEnum,String> getTypeMaps();
+	BuildingDTO getBuilding(Long id);
 	void save(BuildingDTO buildingDTO);
 	void delete(List<Long> ids);
 

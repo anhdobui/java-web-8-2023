@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface RentAreaRepository extends JpaRepository<RentAreaEntity, Long> {
     List<RentAreaEntity> findByBuildingId(Long buildingId);
+    List<RentAreaEntity> findByBuildingIdAndAndValue(Long id,Integer value);
 }

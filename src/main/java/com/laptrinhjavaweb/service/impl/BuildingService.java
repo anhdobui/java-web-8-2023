@@ -74,6 +74,17 @@ public class BuildingService implements IBuildingService {
         return result;
     }
 
+    @Override
+    public BuildingDTO getBuilding(Long id) {
+        BuildingDTO result = null;
+        BuildingEntity buildingEntity = buildingRepository.findById(id).orElse(null);
+        if(buildingEntity !=null){
+            List<RentAreaEntity> rentAreaEntities = rentAreaRepository.findByBuildingId(id);
+            result = buildingConverter.convertToDto(buildingEntity,rentAreaEntities);
+        }
+        return result;
+    }
+
     private BuildingSearchBuilder convertToBuildingSearchBuilder(BuildingSearchDTO buildingserch) {
         BuildingSearchBuilder result = new BuildingSearchBuilder.Builder()
                 .setName(buildingserch.getName())
@@ -100,11 +111,45 @@ public class BuildingService implements IBuildingService {
     @Transactional
     public void save(BuildingDTO buildingDTO) {
         BuildingEntity buildingEntity = buildingConverter.convertToEntity(buildingDTO);
-        BuildingEntity newBuildingEntity =  buildingRepository.save(buildingEntity);
-        List<RentAreaEntity> rentAreaEntities = handleStrValuesToListRentAreaEntity(buildingDTO.getRentArea(),newBuildingEntity);
-        rentAreaEntities.stream().forEach(rentAreaEntity -> {
-            rentAreaRepository.save(rentAreaEntity);
+        BuildingEntity buildingEntityEdit =  buildingRepository.save(buildingEntity);
+        List<RentAreaEntity> newRentAreaEntities = handleFindNewRentAreas(buildingDTO.getRentArea(),buildingEntityEdit);
+        newRentAreaEntities.stream().forEach(item -> {
+            rentAreaRepository.save(item);
         });
+    }
+
+    private List<RentAreaEntity> handleFindNewRentAreas(String rentAreaValues, BuildingEntity buildingEntityEdit) {
+        List<RentAreaEntity> results = new ArrayList<>();
+        List<Integer> newValuesOfRentarea = handleSplitRentareas(rentAreaValues);
+        List<RentAreaEntity> rentAreasExit = rentAreaRepository.findByBuildingId(buildingEntityEdit.getId());
+        rentAreasExit.stream().forEach(item -> {
+            if(!newValuesOfRentarea.contains(item.getValue())){
+                rentAreaRepository.delete(item);
+            }else{
+                newValuesOfRentarea.remove(item.getValue());
+            }
+        });
+        newValuesOfRentarea.stream().forEach(item -> {
+            RentAreaEntity newRentAreaEntity = new RentAreaEntity();
+            newRentAreaEntity.setBuilding(buildingEntityEdit);
+            newRentAreaEntity.setValue(item);
+            results.add(newRentAreaEntity);
+        });
+        return results;
+    }
+
+    private List<Integer> handleSplitRentareas(String rentAreaValues) {
+        List<Integer> result = Arrays.stream(rentAreaValues.split(","))
+                .map(area -> {
+                    try {
+                        return Integer.parseInt(area.trim());
+                    } catch (NumberFormatException e) {
+                        return null;
+                    }
+                })
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+        return result;
     }
 
     @Override
@@ -118,25 +163,5 @@ public class BuildingService implements IBuildingService {
             buildingRepository.deleteById(id);
         });
 
-    }
-
-    private List<RentAreaEntity> handleStrValuesToListRentAreaEntity(String strValues,BuildingEntity newBuildingEntity) {
-        List<Integer> listRentareaForBuilding = Arrays.stream(strValues.split(","))
-                .map(area -> {
-                    try {
-                        return Integer.parseInt(area.trim());
-                    } catch (NumberFormatException e) {
-                        return null;
-                    }
-                })
-                .filter(Objects::nonNull)
-                .collect(Collectors.toList());
-        List<RentAreaEntity> result = listRentareaForBuilding.stream().map(item -> {
-            RentAreaEntity rentAreaEntity = new RentAreaEntity();
-            rentAreaEntity.setValue(item);
-            rentAreaEntity.setBuilding(newBuildingEntity);
-            return rentAreaEntity;
-        }).collect(Collectors.toList());
-        return result;
     }
 }

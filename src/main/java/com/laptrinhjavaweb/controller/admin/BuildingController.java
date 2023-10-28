@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Map;
@@ -34,8 +35,15 @@ public class BuildingController {
         return mav;
     }
     @RequestMapping(value = "/admin/building-edit", method = RequestMethod.GET)
-    public ModelAndView buildingEdit(){
+    public ModelAndView buildingEdit(@RequestParam(name = "id",required = false) Long id){
         ModelAndView mav = new ModelAndView("admin/building/edit");
+        BuildingDTO oldBuilding = new BuildingDTO();
+        String mode = id != null && buildingService.getBuilding(id) != null ? "update":"add";
+        if(mode.equals("update")){
+            oldBuilding = buildingService.getBuilding(id);
+        }
+        mav.addObject("mode",mode);
+        mav.addObject("buildingEdit",oldBuilding);
         mav.addObject("districtmaps",buildingService.getDistricMaps());
         mav.addObject("typemaps",buildingService.getTypeMaps());
         return mav;

@@ -243,6 +243,14 @@
                                     >
                                         <i class="fa fa-bars" aria-hidden="true"></i>
                                     </button>
+                                    <a
+                                            class="btn btn-xs btn-info"
+                                            data-toggle="tooltip"
+                                            title="Chỉnh sửa tòa nhà"
+                                            href="/admin/building-edit?id=${item.id}"
+                                    >
+                                        <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                    </a>
                                 </td>
                             </tr>
                         </c:forEach>
