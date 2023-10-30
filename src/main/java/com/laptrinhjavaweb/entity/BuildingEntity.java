@@ -1,5 +1,6 @@
 package com.laptrinhjavaweb.entity;
 
+import java.math.BigDecimal;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -38,6 +39,33 @@ public class BuildingEntity extends BaseEntity {
     private String serviceFee;
     @Column(name="type")
     private String type;
+
+    @Column(name="carfee")
+    private String carFee;
+    @Column(name="motofee")
+    private String motoFee;
+    @Column(name="overtimefee")
+    private String overtimeFee;
+    @Column(name="waterfee")
+    private String waterFee;
+    @Column(name="electricityfee")
+    private String electricityFee;
+    @Column(name="deposit")
+    private String deposit;
+    @Column(name="payment")
+    private String payment;
+    @Column(name="renttime")
+    private String renttime;
+    @Column(name="note")
+    private String note;
+    @Column(name="linkofbuilding")
+    private String linkOfBuilding;
+    @Column(name="map")
+    private String map;
+    @Column(name="avatar")
+    private String avatar;
+    @Column(name="brokeragetee",precision = 13, scale = 2)
+    private BigDecimal brokeragetee;
 
     @OneToMany(mappedBy = "building")
     private List<RentAreaEntity> rentAreas;
@@ -172,5 +200,109 @@ public class BuildingEntity extends BaseEntity {
 
     public void setServiceFee(String serviceFee) {
         this.serviceFee = serviceFee;
+    }
+
+    public String getCarFee() {
+        return carFee;
+    }
+
+    public void setCarFee(String carFee) {
+        this.carFee = carFee;
+    }
+
+    public String getMotoFee() {
+        return motoFee;
+    }
+
+    public void setMotoFee(String motoFee) {
+        this.motoFee = motoFee;
+    }
+
+    public String getOvertimeFee() {
+        return overtimeFee;
+    }
+
+    public void setOvertimeFee(String overtimeFee) {
+        this.overtimeFee = overtimeFee;
+    }
+
+    public String getWaterFee() {
+        return waterFee;
+    }
+
+    public void setWaterFee(String waterFee) {
+        this.waterFee = waterFee;
+    }
+
+    public String getElectricityFee() {
+        return electricityFee;
+    }
+
+    public void setElectricityFee(String electricityFee) {
+        this.electricityFee = electricityFee;
+    }
+
+    public String getDeposit() {
+        return deposit;
+    }
+
+    public void setDeposit(String deposit) {
+        this.deposit = deposit;
+    }
+
+    public String getPayment() {
+        return payment;
+    }
+
+    public void setPayment(String payment) {
+        this.payment = payment;
+    }
+
+    public String getRenttime() {
+        return renttime;
+    }
+
+    public void setRenttime(String renttime) {
+        this.renttime = renttime;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
+    }
+
+    public String getLinkOfBuilding() {
+        return linkOfBuilding;
+    }
+
+    public void setLinkOfBuilding(String linkOfBuilding) {
+        this.linkOfBuilding = linkOfBuilding;
+    }
+
+    public String getMap() {
+        return map;
+    }
+
+    public void setMap(String map) {
+        this.map = map;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
+    public BigDecimal getBrokeragetee() {
+        return brokeragetee;
+    }
+
+    public void setBrokeragetee(BigDecimal brokeragetee) {
+        this.brokeragetee = brokeragetee;
     }
 }

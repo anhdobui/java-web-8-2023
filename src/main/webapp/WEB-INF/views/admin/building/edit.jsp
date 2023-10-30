@@ -130,6 +130,84 @@
                             </div>
                         </div>
                         <div class="form-group">
+                            <label for="carFee" class="col-sm-3 control-label no-padding-right">Phí xe hơi</label>
+                            <div class="col-sm-9">
+                                <form:input path="carFee" type="text" cssClass="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="motoFee" class="col-sm-3 control-label no-padding-right">Phí xe máy</label>
+                            <div class="col-sm-9">
+                                <form:input path="motoFee" type="text" cssClass="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="overtimeFee" class="col-sm-3 control-label no-padding-right">Phí ngoài giờ</label>
+                            <div class="col-sm-9">
+                                <form:input path="overtimeFee" type="text" cssClass="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="waterFee" class="col-sm-3 control-label no-padding-right">Giá nước</label>
+                            <div class="col-sm-9">
+                                <form:input path="waterFee" type="text" cssClass="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="electricityFee" class="col-sm-3 control-label no-padding-right">Giá điện</label>
+                            <div class="col-sm-9">
+                                <form:input path="electricityFee" type="text" cssClass="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="deposit" class="col-sm-3 control-label no-padding-right">Giá cọc</label>
+                            <div class="col-sm-9">
+                                <form:input path="deposit" type="text" cssClass="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="payment" class="col-sm-3 control-label no-padding-right">Thanh toán</label>
+                            <div class="col-sm-9">
+                                <form:input path="payment" type="text" cssClass="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="renttime" class="col-sm-3 control-label no-padding-right">Thời gian thuê</label>
+                            <div class="col-sm-9">
+                                <form:input path="renttime" type="text" cssClass="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="note" class="col-sm-3 control-label no-padding-right">Ghi chú</label>
+                            <div class="col-sm-9">
+                                <form:input path="note" type="text" cssClass="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="linkOfBuilding" class="col-sm-3 control-label no-padding-right">Link tòa nhà</label>
+                            <div class="col-sm-9">
+                                <form:input path="linkOfBuilding" type="text" cssClass="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="map" class="col-sm-3 control-label no-padding-right">Map</label>
+                            <div class="col-sm-9">
+                                <form:input path="map" type="text" cssClass="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="avatar" class="col-sm-3 control-label no-padding-right">Ảnh đại diện</label>
+                            <div class="col-sm-9">
+                                <form:input path="avatar" type="text" cssClass="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="brokeragetee" class="col-sm-3 control-label no-padding-right">Phí môi giới</label>
+                            <div class="col-sm-9">
+                                <form:input path="brokeragetee" type="number" cssClass="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-group">
                             <label for="serviceFee" class="col-sm-3 control-label no-padding-right">Phí dịch vụ</label>
                             <div class="col-sm-9">
                                 <form:input path="serviceFee" type="text" cssClass="form-control" />
@@ -148,6 +226,7 @@
 
                             </div>
                         </div>
+
 
                         <div class="form-group">
                             <div class="col-sm-2"></div>

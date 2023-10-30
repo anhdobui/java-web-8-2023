@@ -1,5 +1,7 @@
 package com.laptrinhjavaweb.dto;
 
+import java.math.BigDecimal;
+
 public class BuildingDTO {
     private Long id;
     private String name;
@@ -19,6 +21,20 @@ public class BuildingDTO {
     private String serviceFee;
     private String type;
     private String rentArea;
+
+    private String carFee;
+    private String motoFee;
+    private String overtimeFee;
+    private String waterFee;
+    private String electricityFee;
+    private String deposit;
+    private String payment;
+    private String renttime;
+    private String note;
+    private String linkOfBuilding;
+    private String map;
+    private String avatar;
+    private BigDecimal brokeragetee;
 
     public String getWard() {
         return ward;
@@ -162,5 +178,109 @@ public class BuildingDTO {
 
     public void setRentArea(String rentArea) {
         this.rentArea = rentArea;
+    }
+
+    public String getCarFee() {
+        return carFee;
+    }
+
+    public void setCarFee(String carFee) {
+        this.carFee = carFee;
+    }
+
+    public String getMotoFee() {
+        return motoFee;
+    }
+
+    public void setMotoFee(String motoFee) {
+        this.motoFee = motoFee;
+    }
+
+    public String getOvertimeFee() {
+        return overtimeFee;
+    }
+
+    public void setOvertimeFee(String overtimeFee) {
+        this.overtimeFee = overtimeFee;
+    }
+
+    public String getWaterFee() {
+        return waterFee;
+    }
+
+    public void setWaterFee(String waterFee) {
+        this.waterFee = waterFee;
+    }
+
+    public String getElectricityFee() {
+        return electricityFee;
+    }
+
+    public void setElectricityFee(String electricityFee) {
+        this.electricityFee = electricityFee;
+    }
+
+    public String getDeposit() {
+        return deposit;
+    }
+
+    public void setDeposit(String deposit) {
+        this.deposit = deposit;
+    }
+
+    public String getPayment() {
+        return payment;
+    }
+
+    public void setPayment(String payment) {
+        this.payment = payment;
+    }
+
+    public String getRenttime() {
+        return renttime;
+    }
+
+    public void setRenttime(String renttime) {
+        this.renttime = renttime;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
+    }
+
+    public String getLinkOfBuilding() {
+        return linkOfBuilding;
+    }
+
+    public void setLinkOfBuilding(String linkOfBuilding) {
+        this.linkOfBuilding = linkOfBuilding;
+    }
+
+    public String getMap() {
+        return map;
+    }
+
+    public void setMap(String map) {
+        this.map = map;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
+    public BigDecimal getBrokeragetee() {
+        return brokeragetee;
+    }
+
+    public void setBrokeragetee(BigDecimal brokeragetee) {
+        this.brokeragetee = brokeragetee;
     }
 }
