@@ -3,7 +3,10 @@ package com.laptrinhjavaweb.api.admin;
 import com.laptrinhjavaweb.dto.BuildingDTO;
 import com.laptrinhjavaweb.dto.response.ResponseDTO;
 import com.laptrinhjavaweb.dto.response.StaffResponseDTO;
-import com.laptrinhjavaweb.service.impl.BuildingService;
+import com.laptrinhjavaweb.service.IBuildingService;
+
+import com.laptrinhjavaweb.service.IUserService;
+import com.laptrinhjavaweb.service.impl.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,7 +18,10 @@ import java.util.List;
 public class BuildingAPI {
 
     @Autowired
-    private BuildingService buildingService;
+    private IBuildingService buildingService;
+
+    @Autowired
+    private IUserService userService;
 
     @PostMapping
     public BuildingDTO createBuilding(@RequestBody BuildingDTO newBuilding){
@@ -31,26 +37,15 @@ public class BuildingAPI {
         buildingService.save(newBuilding);
     }
     @GetMapping("/{buildingid}/staffs")
-    public ResponseDTO loadStaff(){
+    public ResponseDTO loadStaff(@PathVariable(name = "buildingid") Long buildingId){
         ResponseDTO result = new ResponseDTO();
-        List<StaffResponseDTO> staffs = new ArrayList<>();
-        StaffResponseDTO staffResponseDTO1 = new StaffResponseDTO();
-        staffResponseDTO1.setFullName("nguyen van a");
-        staffResponseDTO1.setStaffId(1l);
-        staffResponseDTO1.setChecked("checked");
-        staffs.add(staffResponseDTO1);
-        StaffResponseDTO staffResponseDTO2 = new StaffResponseDTO();
-        staffResponseDTO2.setFullName("nguyen van b");
-        staffResponseDTO2.setStaffId(2l);
-        staffResponseDTO2.setChecked("checked");
-        staffs.add(staffResponseDTO2);
-        StaffResponseDTO staffResponseDTO3 = new StaffResponseDTO();
-        staffResponseDTO3.setFullName("nguyen van c");
-        staffResponseDTO3.setStaffId(3l);
-        staffResponseDTO3.setChecked("");
-        staffs.add(staffResponseDTO3);
+        List<StaffResponseDTO> staffs = userService.getStaffsEnable(buildingId);
         result.setMessage("success");
         result.setData(staffs);
         return result;
+    }
+    @PostMapping("/{buildingid}/assignment")
+    public void assignmentBuilding(@PathVariable(name = "buildingid") Long buildingId,@RequestBody List<Long> staffIds){
+        buildingService.updateStaffOfBuilding(buildingId,staffIds);
     }
 }

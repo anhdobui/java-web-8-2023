@@ -4,6 +4,7 @@ import com.laptrinhjavaweb.constant.SystemConstant;
 import com.laptrinhjavaweb.converter.UserConverter;
 import com.laptrinhjavaweb.dto.PasswordDTO;
 import com.laptrinhjavaweb.dto.UserDTO;
+import com.laptrinhjavaweb.dto.response.StaffResponseDTO;
 import com.laptrinhjavaweb.entity.RoleEntity;
 import com.laptrinhjavaweb.entity.UserEntity;
 import com.laptrinhjavaweb.exception.MyException;
@@ -158,10 +159,24 @@ public class UserService implements IUserService {
     @Override
     public Map<Long, String> getStaffMaps() {
         Map<Long,String> result = new HashMap<>();
-        List<UserEntity> staffs = userRepository.findByStatusAndRoles_Code(1,"USER");
+        List<UserEntity> staffs = userRepository.findByStatusAndRoles_Code(1,"staff");
         for(UserEntity item:staffs){
             result.put(item.getId(),item.getFullName());
         }
         return result;
     }
+
+    @Override
+    public List<StaffResponseDTO> getStaffsEnable(Long buildingid) {
+        List<StaffResponseDTO> result = new ArrayList<>();
+        List<UserEntity> staffs = userRepository.findByStatusAndRoles_Code(1,"staff");
+        List<UserEntity> staffsOfBuilding = userRepository.findByAssignmentBuildings_Building_Id(buildingid);
+        List<Long> staffIdsOfBuilding = staffsOfBuilding.stream().map(UserEntity::getId).collect(Collectors.toList());
+        staffs.stream().forEach(item -> {
+            StaffResponseDTO staffResponseDTO = userConverter.convertToStaffResponDto(item,staffIdsOfBuilding);
+            result.add(staffResponseDTO);
+        });
+        return result;
+    }
+
 }

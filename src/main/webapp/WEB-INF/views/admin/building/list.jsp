@@ -239,7 +239,7 @@
                                             class="btn btn-xs btn-info"
                                             data-toggle="tooltip"
                                             title="Giao tòa nhà"
-                                            onclick="assignmentBuilding()"
+                                            onclick="assignmentBuilding(${item.id})"
                                     >
                                         <i class="fa fa-bars" aria-hidden="true"></i>
                                     </button>
@@ -280,23 +280,12 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                        <td><input type="checkbox" value="2" id="checkbox_2" /></td>
-                        <td>Nguyễn Văn B</td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox" value="3" id="checkbox_3" /></td>
-                        <td>Nguyễn Văn B</td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox" value="4" id="" /></td>
-                        <td>Nguyễn Văn C</td>
-                    </tr>
+
                     </tbody>
                 </table>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Gửi</button>
+                <button type="button" class="btn btn-default" id="btn_send_assignmentBuilding" data-dismiss="modal">Gửi</button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
             </div>
         </div>
@@ -338,14 +327,46 @@
     loadMessageinLocalSt("messageDanger")
 </script>
 <script>
-    function assignmentBuilding() {
+    function assignmentBuilding(buildingid) {
         openModalAssignmentBuilding();
-        loadStaff();
+        loadStaff(buildingid);
+
+
+        $("#btn_send_assignmentBuilding").click(function (){
+            var staffIds = getStaffChecked()
+            sendApiAssignmentBuilding(buildingid,staffIds)
+            $("#btn_send_assignmentBuilding").off()
+        })
+
     }
-    function loadStaff(){
+    function getStaffChecked(){
+        var listStaffChecked = $("#assignmentBuildingModal tbody .check-box-element:checked")
+            var staffIds = []
+            listStaffChecked.each(function() {
+                var value = $(this).val();
+                staffIds.push(value)
+            });
+        return staffIds
+    }
+    function sendApiAssignmentBuilding(buildingid,staffIds) {
+        $.ajax({
+            type:'POST',
+            url:'${baseAPI}/'+buildingid+'/assignment',
+            data:JSON.stringify(staffIds),
+            contentType: 'application/json',
+            success:function (response) {
+                showToast("Giao tòa nhà cho nhân viên quản lý thành công","success")
+            },
+            error:function (response) {
+                showToast("Đã có lỗi xảy ra","danger")
+                console.log(response)
+            }
+        })
+    }
+    function loadStaff(buildingid){
         $.ajax({
             type:'GET',
-            url:'${loadStaffAPI}/1/staffs',
+            url:'${loadStaffAPI}/'+buildingid+'/staffs',
             dataType:"json",
             success:function (response) {
                 var row = '';
@@ -378,7 +399,7 @@
             }
         })
     }
-    function openModalAssignmentBuilding() {
+    function openModalAssignmentBuilding(buildingid) {
         $("#assignmentBuildingModal").modal();
     }
 
@@ -398,9 +419,8 @@
                 });
                 $("#btnComfirmRemoveBuilding").click(function (e){
                     removeBuilding(ids_remove)
-                    setTimeout(function() {
-                        location.reload(true);
-                    },800)
+                    location.reload(true);
+
                 })
 
             }
