@@ -5,8 +5,10 @@ import com.laptrinhjavaweb.entity.BuildingEntity;
 import com.laptrinhjavaweb.entity.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface AssignmentBuildingRepository  extends JpaRepository<AssignmentBuildingEntity, Long> {
+    List<AssignmentBuildingEntity> findByBuilding_Id(Long buildingId);
     Optional<AssignmentBuildingEntity> findOByBuildingAndStaff(BuildingEntity buildingEntity, UserEntity staff);
 }

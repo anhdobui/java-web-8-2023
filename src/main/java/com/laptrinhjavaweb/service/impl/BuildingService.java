@@ -170,6 +170,10 @@ public class BuildingService implements IBuildingService {
             rentAreaEntities.stream().forEach(item -> {
                 rentAreaRepository.delete(item);
             });
+            List<AssignmentBuildingEntity> assignmentBuildingEntities = assignmentBuildingRepository.findByBuilding_Id(id);
+            assignmentBuildingEntities.forEach(item -> {
+                assignmentBuildingRepository.delete(item);
+            });
             buildingRepository.deleteById(id);
         });
 

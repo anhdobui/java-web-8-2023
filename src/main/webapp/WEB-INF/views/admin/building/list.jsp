@@ -210,7 +210,7 @@
                     <table id="buildingList" class="table table-striped table-bordered table-hover">
                         <thead>
                         <tr>
-                            <th></th>
+                            <th><input type="checkbox" id="cb_buildingid_all" /></th>
                             <th>Tên tòa nhà</th>
                             <th>Địa chỉ</th>
                             <th>Tên quản lý</th>
@@ -395,7 +395,8 @@
                 location.reload();
             },
             error:function (response) {
-                localStorage.setItem("messageDanger", "Đã có lỗi xảy ra");
+                localStorage.setItem("messageDanger", "Đã xóa thành công "+ids.length+" tòa nhà");
+                location.reload();
             }
         })
     }
@@ -406,6 +407,16 @@
     $('#btnSearch').click(function (e){
         e.preventDefault()
         $('#listForm').submit()
+    })
+    var checkAll = $("#cb_buildingid_all")
+    var listCheckBuilding = $(".cb-building-js-handle")
+    checkAll.change(function (){
+
+        if(checkAll.is(":checked")){
+            listCheckBuilding.prop("checked", true);
+        }else{
+            listCheckBuilding.prop("checked", false);
+        }
     })
     $("#btnDeleteBuilding").click(function (e){
         var listChecked = $(".cb-building-js-handle:checked")
@@ -418,9 +429,7 @@
                     ids_remove.push(value)
                 });
                 $("#btnComfirmRemoveBuilding").click(function (e){
-                    removeBuilding(ids_remove)
-                    location.reload(true);
-
+                     removeBuilding(ids_remove)
                 })
 
             }
