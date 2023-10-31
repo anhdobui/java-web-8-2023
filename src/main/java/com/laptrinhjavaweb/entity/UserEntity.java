@@ -25,12 +25,12 @@ public class UserEntity extends BaseEntity {
     @Column(name = "email", unique = true)
     private String email;
 
-    @OneToMany(mappedBy = "staff")
-    private List<AssignmentCustomerEntity> assignmentCustomers;
+    @ManyToMany(mappedBy = "staffs")
+    private List<CustomerEntity> customers;
 
 
-    @OneToMany(mappedBy = "staff")
-    private List<AssignmentBuildingEntity> assignmentBuildings;
+    @ManyToMany(mappedBy = "staffs")
+    private List<BuildingEntity> buildings;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_role",
@@ -86,22 +86,23 @@ public class UserEntity extends BaseEntity {
         this.email = email;
     }
 
-    public List<AssignmentCustomerEntity> getAssignmentCustomers() {
-        return assignmentCustomers;
+    public List<CustomerEntity> getCustomers() {
+        return customers;
     }
 
-    public void setAssignmentCustomers(
-            List<AssignmentCustomerEntity> assignmentCustomers) {
-        this.assignmentCustomers = assignmentCustomers;
+    public void setCustomers(List<CustomerEntity> customers) {
+        this.customers = customers;
     }
 
-    public List<AssignmentBuildingEntity> getAssignmentBuildings() {
-        return assignmentBuildings;
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
     }
 
-    public void setAssignmentBuildings(
-            List<AssignmentBuildingEntity> assignmentBuildings) {
-        this.assignmentBuildings = assignmentBuildings;
+    public List<BuildingEntity> getBuildings() {
+        return buildings;
     }
 
+    public void setBuildings(List<BuildingEntity> buildings) {
+        this.buildings = buildings;
+    }
 }

@@ -33,10 +33,8 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         String url = "";
         List<String> roles = SecurityUtils.getAuthorities();
         if (isUser(roles)) {
-            url = SystemConstant.HOME;
-        } else if (isAdmin(roles)) {
             url = SystemConstant.ADMIN_HOME;
-        } else {
+        } else if (isAdmin(roles)) {
             url = SystemConstant.ADMIN_HOME;
         }
         return url;

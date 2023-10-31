@@ -1,10 +1,7 @@
 package com.laptrinhjavaweb.entity;
 
 import java.util.List;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "customer")
@@ -19,8 +16,11 @@ public class CustomerEntity extends BaseEntity{
     @Column
     private String email;
 
-    @OneToMany(mappedBy = "customer")
-    private List<AssignmentCustomerEntity> assignmentCustomers;
+    @ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+        @JoinTable(name = "assignmentcustomer",
+            joinColumns = @JoinColumn(name = "customerid"),
+            inverseJoinColumns = @JoinColumn(name = "staffid"))
+    private List<UserEntity> staffs;
 
     @OneToMany(mappedBy = "customer")
     private List<TransactionEntity> transactions;
@@ -49,13 +49,12 @@ public class CustomerEntity extends BaseEntity{
         this.email = email;
     }
 
-    public List<AssignmentCustomerEntity> getAssignmentCustomers() {
-        return assignmentCustomers;
+    public List<UserEntity> getStaffs() {
+        return staffs;
     }
 
-    public void setAssignmentCustomers(
-            List<AssignmentCustomerEntity> assignmentCustomers) {
-        this.assignmentCustomers = assignmentCustomers;
+    public void setStaffs(List<UserEntity> staffs) {
+        this.staffs = staffs;
     }
 
     public List<TransactionEntity> getTransactions() {

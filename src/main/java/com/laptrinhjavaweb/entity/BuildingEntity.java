@@ -2,10 +2,7 @@ package com.laptrinhjavaweb.entity;
 
 import java.math.BigDecimal;
 import java.util.List;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "building")
@@ -70,8 +67,11 @@ public class BuildingEntity extends BaseEntity {
     @OneToMany(mappedBy = "building")
     private List<RentAreaEntity> rentAreas;
 
-    @OneToMany(mappedBy = "building")
-    private List<AssignmentBuildingEntity> assignmentBuildings;
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinTable(name = "assignmentbuilding",
+            joinColumns = @JoinColumn(name = "buildingid"),
+            inverseJoinColumns = @JoinColumn(name = "staffid"))
+    private List<UserEntity> staffs;
 
     public List<RentAreaEntity> getRentAreas() {
         return rentAreas;
@@ -169,13 +169,12 @@ public class BuildingEntity extends BaseEntity {
         this.type = type;
     }
 
-    public List<AssignmentBuildingEntity> getAssignmentBuildings() {
-        return assignmentBuildings;
+    public List<UserEntity> getStaffs() {
+        return staffs;
     }
 
-    public void setAssignmentBuildings(
-            List<AssignmentBuildingEntity> assignmentBuildings) {
-        this.assignmentBuildings = assignmentBuildings;
+    public void setStaffs(List<UserEntity> staffs) {
+        this.staffs = staffs;
     }
 
     public String getManagerName() {

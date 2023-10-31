@@ -169,14 +169,15 @@ public class UserService implements IUserService {
     @Override
     public List<StaffResponseDTO> getStaffsEnable(Long buildingid) {
         List<StaffResponseDTO> result = new ArrayList<>();
-        List<UserEntity> staffs = userRepository.findByStatusAndRoles_Code(1,"staff");
-        List<UserEntity> staffsOfBuilding = userRepository.findByAssignmentBuildings_Building_Id(buildingid);
+        List<UserEntity> staffs = userRepository.findByStatusAndRoles_Code(1,"STAFF");
+        List<UserEntity> staffsOfBuilding = userRepository.findUsersByBuildings_Id(buildingid);
         List<Long> staffIdsOfBuilding = staffsOfBuilding.stream().map(UserEntity::getId).collect(Collectors.toList());
-        staffs.stream().forEach(item -> {
+        staffs.forEach(item -> {
             StaffResponseDTO staffResponseDTO = userConverter.convertToStaffResponDto(item,staffIdsOfBuilding);
             result.add(staffResponseDTO);
         });
         return result;
     }
+
 
 }

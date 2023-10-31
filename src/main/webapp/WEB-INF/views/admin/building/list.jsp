@@ -331,14 +331,13 @@
         openModalAssignmentBuilding();
         loadStaff(buildingid);
 
-
-        $("#btn_send_assignmentBuilding").click(function (){
-            var staffIds = getStaffChecked()
-            sendApiAssignmentBuilding(buildingid,staffIds)
-            $("#btn_send_assignmentBuilding").off()
-        })
-
     }
+    $("#btn_send_assignmentBuilding").click(function (){
+        var buildingid = $('#staffList').attr("data")
+        var staffIds = getStaffChecked()
+        sendApiAssignmentBuilding(buildingid,staffIds)
+    })
+
     function getStaffChecked(){
         var listStaffChecked = $("#assignmentBuildingModal tbody .check-box-element:checked")
             var staffIds = []
@@ -377,6 +376,8 @@
                     row += '</tr>';
                 })
                 $('#staffList tbody').html(row);
+                $('#staffList').attr("data",buildingid)
+
             },
             error:function (response) {
                 showToast("Đã có lỗi xảy ra","danger")
