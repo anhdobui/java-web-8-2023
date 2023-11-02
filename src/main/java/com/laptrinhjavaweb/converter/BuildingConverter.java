@@ -28,11 +28,13 @@ public class BuildingConverter {
 
         String rentareaStr = rentAreaEntities.stream().map(item -> item.getValue().toString()).collect(Collectors.joining(","));
         result.setRentArea(rentareaStr);
+        result.setImage(entity.getAvatar());
         return result;
     }
 
     public BuildingEntity convertToEntity (BuildingDTO dto){
         BuildingEntity result = modelMapper.map(dto,BuildingEntity.class);
+        result.setAvatar(dto.getImage());
         return result;
     }
 }

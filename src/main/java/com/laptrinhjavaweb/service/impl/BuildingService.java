@@ -13,13 +13,15 @@ import com.laptrinhjavaweb.repository.BuildingRepository;
 import com.laptrinhjavaweb.repository.RentAreaRepository;
 import com.laptrinhjavaweb.repository.UserRepository;
 import com.laptrinhjavaweb.service.IBuildingService;
+import com.laptrinhjavaweb.utils.UploadFileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+import org.apache.tomcat.util.codec.binary.Base64;
+import java.io.File;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -34,6 +36,8 @@ public class BuildingService implements IBuildingService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private UploadFileUtils uploadFileUtils;
 
     @Autowired
     private BuildingConverter buildingConverter;
@@ -121,7 +125,16 @@ public class BuildingService implements IBuildingService {
     @Override
     @Transactional
     public void save(BuildingDTO buildingDTO) {
+        Long buildingId = buildingDTO.getId();
         BuildingEntity buildingEntity = buildingConverter.convertToEntity(buildingDTO);
+        if (buildingId != null) { // update
+            BuildingEntity foundBuilding = buildingRepository.findById(buildingId)
+                    .orElse(null);
+            if(foundBuilding != null){
+                buildingEntity.setAvatar(foundBuilding.getAvatar());
+            }
+        }
+        saveThumbnail(buildingDTO, buildingEntity);
         buildingEntity = buildingRepository.save(buildingEntity);
         List<RentAreaEntity> newRentAreaEntities = handleFindNewRentAreas(buildingDTO.getRentArea(), buildingEntity);
         newRentAreaEntities.stream().forEach(item -> {
@@ -207,5 +220,20 @@ public class BuildingService implements IBuildingService {
         return (long) buildingRepository.countBuildingFound(buildingSearchBuilder);
     }
 
+
+    private void saveThumbnail(BuildingDTO buildingDTO, BuildingEntity buildingEntity) {
+        String path = "/building/" + buildingDTO.getImageName();
+        if (null != buildingDTO.getImageBase64()) {
+            if (null != buildingEntity.getAvatar()) {
+                if (!path.equals(buildingEntity.getAvatar())) {
+                    File file = new File("C://home/office" + buildingEntity.getAvatar());
+                    file.delete();
+                }
+            }
+            byte[] bytes = Base64.decodeBase64(buildingDTO.getImageBase64().getBytes());
+            uploadFileUtils.writeOrUpdate(path, bytes);
+            buildingEntity.setAvatar(path);
+        }
+    }
 
 }

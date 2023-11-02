@@ -33,8 +33,41 @@ public class BuildingDTO extends AbstractDTO<BuildingDTO>{
     private String note;
     private String linkOfBuilding;
     private String map;
-    private String avatar;
+
     private BigDecimal brokeragetee;
+
+    private String image;
+
+    private String imageBase64;
+
+    private String imageName;
+
+    public String getImageBase64() {
+        if (imageBase64 != null) {
+            return imageBase64.split(",")[1];
+        }
+        return null;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public void setImageBase64(String imageBase64) {
+        this.imageBase64 = imageBase64;
+    }
+
+    public String getImageName() {
+        return imageName;
+    }
+
+    public void setImageName(String imageName) {
+        this.imageName = imageName;
+    }
 
     public String getWard() {
         return ward;
@@ -268,13 +301,7 @@ public class BuildingDTO extends AbstractDTO<BuildingDTO>{
         this.map = map;
     }
 
-    public String getAvatar() {
-        return avatar;
-    }
 
-    public void setAvatar(String avatar) {
-        this.avatar = avatar;
-    }
 
     public BigDecimal getBrokeragetee() {
         return brokeragetee;

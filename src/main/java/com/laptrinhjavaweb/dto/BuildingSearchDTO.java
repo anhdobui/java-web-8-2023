@@ -20,6 +20,7 @@ public class BuildingSearchDTO extends AbstractDTO<BuildingSearchDTO> {
     private Integer rentAreaTo;
     private List<String> types;
 
+
     public String getName() {
         return name;
     }
