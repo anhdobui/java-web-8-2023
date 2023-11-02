@@ -5,6 +5,7 @@ import com.laptrinhjavaweb.constant.SystemConstant;
 import com.laptrinhjavaweb.entity.BuildingEntity;
 import com.laptrinhjavaweb.repository.custom.BuildingRepositoryCustom;
 import com.laptrinhjavaweb.utils.StringUtils;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -20,7 +21,26 @@ public class BuildingRepositoryCustomImpl implements BuildingRepositoryCustom {
     private EntityManager entityManager;
 
     @Override
-    public List<BuildingEntity> findBuilding(BuildingSearchBuilder builder) {
+    public Long countBuildingFound(BuildingSearchBuilder builder) {
+        StringBuilder finalQuery = new StringBuilder();
+        StringBuilder joinQuery = new StringBuilder("");
+        StringBuilder whereQuery = new StringBuilder("");
+        joinQuery.append(buildSqlJoining(builder));
+        whereQuery.append(buildWhereCommonSql(builder)).append(builWhereSpecialSql(builder));
+        finalQuery.append("select count(*)").append("\nfrom building as b").append(joinQuery)
+                .append(SystemConstant.ONE_EQUAL_ONE).append(whereQuery);
+        String sqlQuery = finalQuery.toString();
+        Query query = entityManager.createNativeQuery(sqlQuery);
+        Long count = ((Number) query.getSingleResult()).longValue();
+        return count;
+
+    }
+
+    @Override
+    public List<BuildingEntity> findBuilding(BuildingSearchBuilder builder, Pageable pageable) {
+
+        Integer limmit = pageable.getPageSize();
+        Integer ofSet = pageable.getPageNumber()*limmit;
         StringBuilder finalQuery = new StringBuilder();
         StringBuilder joinQuery = new StringBuilder("");
         StringBuilder whereQuery = new StringBuilder("");
@@ -28,7 +48,10 @@ public class BuildingRepositoryCustomImpl implements BuildingRepositoryCustom {
         joinQuery.append(buildSqlJoining(builder));
         whereQuery.append(buildWhereCommonSql(builder)).append(builWhereSpecialSql(builder));
         finalQuery.append("select b.*").append("\nfrom building as b").append(joinQuery)
-                .append(SystemConstant.ONE_EQUAL_ONE).append(whereQuery).append("\n group by b.id");
+                .append(SystemConstant.ONE_EQUAL_ONE).append(whereQuery)
+                .append("\n limit "+limmit)
+                .append("\n offset "+ofSet);
+//                .append("\n group by b.id");
         String sqlQuery = finalQuery.toString();
         Query query = entityManager.createNativeQuery(sqlQuery, BuildingEntity.class);
         return query.getResultList();

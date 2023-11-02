@@ -2,7 +2,7 @@ package com.laptrinhjavaweb.dto;
 
 import java.util.List;
 
-public class BuildingSearchDTO {
+public class BuildingSearchDTO extends AbstractDTO<BuildingSearchDTO> {
     private String name;
     private String ward;
     private String street;

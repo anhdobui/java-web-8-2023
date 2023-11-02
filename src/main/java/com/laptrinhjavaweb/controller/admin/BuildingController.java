@@ -7,6 +7,9 @@ import com.laptrinhjavaweb.service.IBuildingService;
 import com.laptrinhjavaweb.service.IUserService;
 import com.laptrinhjavaweb.service.impl.BuildingService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,13 +28,28 @@ public class BuildingController {
     private IUserService userService;
 
     @RequestMapping(value = "/admin/building-list", method = RequestMethod.GET)
-    public ModelAndView buildingList(@ModelAttribute("modelSearch") BuildingSearchDTO buildingSearch){
+    public ModelAndView buildingList(@ModelAttribute("modelSearch") BuildingSearchDTO buildingSearch,
+                                     @RequestParam(value="page",required = false) Integer page,
+                                     @RequestParam(value="pageSize",required = false) Integer pageSize){
         ModelAndView mav = new ModelAndView("admin/building/list");
         mav.addObject("modelSearch",buildingSearch);
-        mav.addObject("buildings",buildingService.findBuilding(buildingSearch));
         mav.addObject("districtmaps",buildingService.getDistricMaps());
         mav.addObject("typemaps",buildingService.getTypeMaps());
         mav.addObject("staffmaps",userService.getStaffMaps());
+        if(pageSize == null){
+            pageSize = 2;
+        }
+        if(page == null || page < 1){
+            page = 1;
+        }
+            Pageable pageable = PageRequest.of(page - 1, pageSize);
+            Page<BuildingDTO> objects = buildingService.findBuilding(buildingSearch,pageable);
+            mav.addObject("buildings",objects.getContent());
+            mav.addObject("currentPage",objects.getNumber()+1);
+            mav.addObject("totalItems",objects.getTotalElements());
+            mav.addObject("totalPages",objects.getTotalPages());
+            mav.addObject("pageSize",pageSize);
+            mav.addObject("page", page);
         return mav;
     }
     @RequestMapping(value = "/admin/building-edit", method = RequestMethod.GET)

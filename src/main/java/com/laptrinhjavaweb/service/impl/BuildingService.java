@@ -14,6 +14,9 @@ import com.laptrinhjavaweb.repository.RentAreaRepository;
 import com.laptrinhjavaweb.repository.UserRepository;
 import com.laptrinhjavaweb.service.IBuildingService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -48,16 +51,19 @@ public class BuildingService implements IBuildingService {
         return result;
     }
 
+
     @Override
-    public List<BuildingDTO> findBuilding(BuildingSearchDTO buildingserch) {
-        List<BuildingDTO> result = new ArrayList<>();
+    public Page<BuildingDTO> findBuilding(BuildingSearchDTO buildingserch, Pageable pageable) {
+        List<BuildingDTO> buildingDTOs = new ArrayList<>();
         BuildingSearchBuilder buildingSearchBuilder = convertToBuildingSearchBuilder(buildingserch);
-        List<BuildingEntity> buildingEntities = buildingRepository.findBuilding(buildingSearchBuilder);
+        List<BuildingEntity> buildingEntities = buildingRepository.findBuilding(buildingSearchBuilder,pageable);
+        long totalItem= totalItemFound(buildingSearchBuilder);
         buildingEntities.stream().forEach(item -> {
             List<RentAreaEntity> areaEntities = rentAreaRepository.findByBuildingId(item.getId());
             BuildingDTO buildingDTO = buildingConverter.convertToDto(item, areaEntities);
-            result.add(buildingDTO);
+            buildingDTOs.add(buildingDTO);
         });
+        Page<BuildingDTO> result = new PageImpl<>(buildingDTOs,pageable,totalItem);
         return result;
     }
 
@@ -161,7 +167,12 @@ public class BuildingService implements IBuildingService {
     @Transactional
     public void delete(List<Long> ids) {
         ids.stream().forEach(id -> {
-            buildingRepository.deleteById(id);
+            BuildingEntity buildingEntity = buildingRepository.findById(id).orElse(null);
+            if(buildingEntity != null){
+                buildingEntity.getStaffs().clear();
+                buildingRepository.save(buildingEntity);
+                buildingRepository.delete(buildingEntity);
+            }
         });
 
     }
@@ -190,5 +201,11 @@ public class BuildingService implements IBuildingService {
             });
         }
     }
+
+    @Override
+    public long totalItemFound(BuildingSearchBuilder buildingSearchBuilder) {
+        return (long) buildingRepository.countBuildingFound(buildingSearchBuilder);
+    }
+
 
 }

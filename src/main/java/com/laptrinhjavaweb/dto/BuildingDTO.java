@@ -2,7 +2,7 @@ package com.laptrinhjavaweb.dto;
 
 import java.math.BigDecimal;
 
-public class BuildingDTO {
+public class BuildingDTO extends AbstractDTO<BuildingDTO>{
     private Long id;
     private String name;
     private String address;

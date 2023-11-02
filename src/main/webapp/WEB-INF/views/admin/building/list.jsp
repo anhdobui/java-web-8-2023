@@ -12,6 +12,7 @@
 <c:url var="baseAPI" value="/api/building" />
 <html>
 <head>
+
     <title>Danh sách tòa nhà</title>
 </head>
 <body>
@@ -73,6 +74,8 @@
                         <div class="widget-body">
                             <div class="widget-main">
                                 <form:form modelAttribute ="modelSearch" action="${buildingListURL}" id="listForm" method="GET">
+                                    <input id="page" type="hidden" name="page" value="${page}"/>
+                                    <input id="pageSize" type="hidden" name="pageSize" value="${pageSize}"/>
                                     <div class="row">
                                         <div class="col-sm-6">
                                             <label for="name">Tên tòa nhà</label>
@@ -207,58 +210,107 @@
             <!-- /.row -->
             <div class="row">
                 <div class="col-xs-12">
-                    <table id="buildingList" class="table table-striped table-bordered table-hover">
-                        <thead>
-                        <tr>
-                            <th><input type="checkbox" id="cb_buildingid_all" /></th>
-                            <th>Tên tòa nhà</th>
-                            <th>Địa chỉ</th>
-                            <th>Tên quản lý</th>
-                            <th>Số tầng hầm</th>
-                            <th>D.T sàn</th>
-                            <th>D.T thuê</th>
-                            <th>Giá thuê</th>
-                            <th>Phí dịch vụ</th>
-                            <th>Thao tác</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <c:forEach var="item" items="${buildings}">
-                            <tr>
-                                <td><input type="checkbox" value="${item.id}" class="cb-building-js-handle" id="cb_buildingid_${item.id}" /></td>
-                                <td>${item.name}</td>
-                                <td>${item.address}</td>
-                                <td>${item.managerName}</td>
-                                <td>${item.numberOfBasement}</td>
-                                <td>${item.floorArea}</td>
-                                <td>${item.rentArea}</td>
-                                <td>${item.rentPrice}</td>
-                                <td>${item.serviceFee}</td>
-                                <td>
-                                    <button
-                                            class="btn btn-xs btn-info"
-                                            data-toggle="tooltip"
-                                            title="Giao tòa nhà"
-                                            onclick="assignmentBuilding(${item.id})"
-                                    >
-                                        <i class="fa fa-bars" aria-hidden="true"></i>
-                                    </button>
-                                    <a
-                                            class="btn btn-xs btn-info"
-                                            data-toggle="tooltip"
-                                            title="Chỉnh sửa tòa nhà"
-                                            href="/admin/building-edit?id=${item.id}"
-                                    >
-                                        <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                                    </a>
-                                </td>
-                            </tr>
-                        </c:forEach>
+                   <display:table name="buildings" id="buildingList" class="table table-striped table-bordered table-hover">
+                       <display:column
+                       title="<fieldset ><input type='checkbox' id='cb_buildingid_all' /></fieldset>">
+                           <fieldset>
+                               <input type="checkbox" value="${buildingList.id}" class="cb-building-js-handle" id="cb_buildingid_${buildingList.id}" />
+                           </fieldset>
+                       </display:column>
+                       <display:column headerClass="text-left" property="name" title="Tên tòa nhà"/>
+                       <display:column headerClass="text-left" property="address" title="Địa chỉ"/>
+                       <display:column headerClass="text-left" property="managerName" title="Tên quản lý"/>
+                       <display:column headerClass="text-left" property="numberOfBasement" title="Số tầng hầm"/>
+                       <display:column headerClass="text-left" property="floorArea" title="DT.sàn"/>
+                       <display:column headerClass="text-left" property="rentArea" title="DT.thuê"/>
+                       <display:column headerClass="text-left" property="rentPrice" title="Giá thuê"/>
+                       <display:column headerClass="text-left" property="serviceFee" title="Phí dịch vụ"/>
+                       <display:column headerClass="text-left"  title="Thao tác" >
+                           <button
+                                   class="btn btn-xs btn-info"
+                                   data-toggle="tooltip"
+                                   title="Giao tòa nhà"
+                                   onclick="assignmentBuilding(${buildingList.id})"
+                           >
+                               <i class="fa fa-bars" aria-hidden="true"></i>
+                           </button>
+                           <a
+                                   class="btn btn-xs btn-info"
+                                   data-toggle="tooltip"
+                                   title="Chỉnh sửa tòa nhà"
+                                   href="/admin/building-edit?id=${buildingList.id}"
+                           >
+                               <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                           </a>
+                       </display:column>
+                   </display:table>
+                    <%--<table id="buildingList" class="table table-striped table-bordered table-hover">--%>
+                    <%--<thead>--%>
+                    <%----%>
+                    <%--<tr>--%>
+                        <%--<th><input type="checkbox" id="cb_buildingid_all" /></th>--%>
+                        <%--<th>Tên tòa nhà</th>--%>
+                        <%--<th>Địa chỉ</th>--%>
+                        <%--<th>Tên quản lý</th>--%>
+                        <%--<th>Số tầng hầm</th>--%>
+                        <%--<th>D.T sàn</th>--%>
+                        <%--<th>D.T thuê</th>--%>
+                        <%--<th>Giá thuê</th>--%>
+                        <%--<th>Phí dịch vụ</th>--%>
+                        <%--<th>Thao tác</th>--%>
+                    <%--</tr>--%>
+                    <%--</thead>--%>
+                    <%--<tbody>--%>
+                    <%--<c:forEach var="item" items="${buildings}">--%>
+                        <%--<tr>--%>
+                            <%--<td><input type="checkbox" value="${item.id}" class="cb-building-js-handle" id="cb_buildingid_${item.id}" /></td>--%>
+                            <%--<td>${item.name}</td>--%>
+                            <%--<td>${item.address}</td>--%>
+                            <%--<td>${item.managerName}</td>--%>
+                            <%--<td>${item.numberOfBasement}</td>--%>
+                            <%--<td>${item.floorArea}</td>--%>
+                            <%--<td>${item.rentArea}</td>--%>
+                            <%--<td>${item.rentPrice}</td>--%>
+                            <%--<td>${item.serviceFee}</td>--%>
+                            <%--<td>--%>
+                                <%--<button--%>
+                                        <%--class="btn btn-xs btn-info"--%>
+                                        <%--data-toggle="tooltip"--%>
+                                        <%--title="Giao tòa nhà"--%>
+                                        <%--onclick="assignmentBuilding(${item.id})"--%>
+                                <%-->--%>
+                                    <%--<i class="fa fa-bars" aria-hidden="true"></i>--%>
+                                <%--</button>--%>
+                                <%--<a--%>
+                                        <%--class="btn btn-xs btn-info"--%>
+                                        <%--data-toggle="tooltip"--%>
+                                        <%--title="Chỉnh sửa tòa nhà"--%>
+                                        <%--href="/admin/building-edit?id=${item.id}"--%>
+                                <%-->--%>
+                                    <%--<i class="fa fa-pencil-square-o" aria-hidden="true"></i>--%>
+                                <%--</a>--%>
+                            <%--</td>--%>
+                        <%--</tr>--%>
+                    <%--</c:forEach>--%>
 
-                        </tbody>
-                    </table>
+                    <%--</tbody>--%>
+                <%--</table>--%>
+
+
                 </div>
             </div>
+            <br />
+            <c:if test="${objects.size() == 0}">
+                <span>No objectsfound!</span>
+            </c:if>
+
+            <div class="d-flex mt-5 justify-content-center">
+                <nav aria-label="...">
+                    <!--pagination-->
+                    <ul class="pagination" id="pagination"></ul>
+                </nav>
+            </div>
+
         </div>
         <!-- /.page-content -->
     </div>
@@ -311,6 +363,10 @@
         </div>
     </div>
 </div>
+<%--https://www.jqueryscript.net/other/Simple-Customizable-Pagination-Plugin-with-jQuery-Bootstrap-Twbs-Pagination.html--%>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twbs-pagination/1.4.2/jquery.twbsPagination.min.js"
+        integrity="sha512-frFP3ZxLshB4CErXkPVEXnd5ingvYYtYhE5qllGdZmcOlRKNEPbufyupfdSTNmoF5ICaQNO6SenXzOZvoGkiIA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
     function showToast(message,status){
         var toastElm = $("#toast-message").removeClass("hidden")
@@ -396,7 +452,7 @@
                 location.reload();
             },
             error:function (response) {
-                localStorage.setItem("messageDanger", "Đã xóa thành công "+ids.length+" tòa nhà");
+                localStorage.setItem("messageDanger", "Đã có lỗi xảy ra");
                 location.reload();
             }
         })
@@ -407,6 +463,7 @@
 
     $('#btnSearch').click(function (e){
         e.preventDefault()
+        $('#page').val(1);
         $('#listForm').submit()
     })
     var checkAll = $("#cb_buildingid_all")
@@ -435,6 +492,36 @@
 
             }
     })
+
+    $(function () {
+        var currentPage = ${currentPage}
+        var totalPages = ${totalPages}
+            if(currentPage > totalPages){
+                totalPages = currentPage
+            }
+         window.pagObj = $('#pagination').twbsPagination({
+            totalPages: totalPages ,
+            visiblePages: totalPages+1,
+            startPage: currentPage,
+            onPageClick: function (event, page) {
+                if (currentPage != page) {
+                    $('#page').val(page);
+                    var form = $("#listForm")
+                    var formData = form.serialize();
+                    var urlSearchParams = new URLSearchParams(formData);
+                    var queryString = urlSearchParams.toString();
+                    var action = form.attr('action')
+                    form.attr('action', action + "?" + queryString);
+                    form.submit();
+                }
+            },
+            // Text labels
+            first: 'Trang đầu',
+            prev: 'Trang trước',
+            next: 'Tiếp theo',
+            last: 'Trang cuối',
+        });
+    });
 </script>
 
 </body>
