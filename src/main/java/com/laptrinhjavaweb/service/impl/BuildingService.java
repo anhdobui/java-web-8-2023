@@ -132,34 +132,33 @@ public class BuildingService implements IBuildingService {
                     .orElse(null);
             if(foundBuilding != null){
                 buildingEntity.setAvatar(foundBuilding.getAvatar());
+                buildingEntity.setStaffs(foundBuilding.getStaffs());
+                buildingEntity.setRentAreas(foundBuilding.getRentAreas());
             }
         }
         saveThumbnail(buildingDTO, buildingEntity);
-        buildingEntity = buildingRepository.save(buildingEntity);
-        List<RentAreaEntity> newRentAreaEntities = handleFindNewRentAreas(buildingDTO.getRentArea(), buildingEntity);
-        newRentAreaEntities.stream().forEach(item -> {
-            rentAreaRepository.save(item);
-        });
+        handleSetNewRentAreas(buildingDTO.getRentArea(),buildingEntity);
+        buildingRepository.save(buildingEntity);
     }
 
-    private List<RentAreaEntity> handleFindNewRentAreas(String rentAreaValues, BuildingEntity buildingEntityEdit) {
-        List<RentAreaEntity> results = new ArrayList<>();
+    private void handleSetNewRentAreas(String rentAreaValues, BuildingEntity buildingEntityEdit) {
         List<Integer> newValuesOfRentarea = handleSplitRentareas(rentAreaValues);
-        List<RentAreaEntity> rentAreasExit = rentAreaRepository.findByBuildingId(buildingEntityEdit.getId());
-        rentAreasExit.stream().forEach(item -> {
-            if (!newValuesOfRentarea.contains(item.getValue())) {
-                rentAreaRepository.delete(item);
-            } else {
-                newValuesOfRentarea.remove(item.getValue());
-            }
-        });
-        newValuesOfRentarea.stream().forEach(item -> {
+        if(buildingEntityEdit.getRentAreas() != null){
+            buildingEntityEdit.getRentAreas().removeIf(item -> !newValuesOfRentarea.contains(item.getValue()));
+            newValuesOfRentarea.removeAll(buildingEntityEdit.getRentAreas().stream()
+                    .map(RentAreaEntity::getValue)
+                    .collect(Collectors.toList()));
+        }else{
+            buildingEntityEdit.setRentAreas(new ArrayList<>());
+        }
+
+        List<RentAreaEntity> newRentAreas =  newValuesOfRentarea.stream().map(item -> {
             RentAreaEntity newRentAreaEntity = new RentAreaEntity();
             newRentAreaEntity.setBuilding(buildingEntityEdit);
             newRentAreaEntity.setValue(item);
-            results.add(newRentAreaEntity);
-        });
-        return results;
+            return newRentAreaEntity;
+        }).collect(Collectors.toList());
+        buildingEntityEdit.getRentAreas().addAll(newRentAreas);
     }
 
     private List<Integer> handleSplitRentareas(String rentAreaValues) {
@@ -179,15 +178,7 @@ public class BuildingService implements IBuildingService {
     @Override
     @Transactional
     public void delete(List<Long> ids) {
-        ids.stream().forEach(id -> {
-            BuildingEntity buildingEntity = buildingRepository.findById(id).orElse(null);
-            if(buildingEntity != null){
-                buildingEntity.getStaffs().clear();
-                buildingRepository.save(buildingEntity);
-                buildingRepository.delete(buildingEntity);
-            }
-        });
-
+        buildingRepository.deleteByIdIn(ids);
     }
 
     @Override
@@ -202,16 +193,15 @@ public class BuildingService implements IBuildingService {
                     newStaffIds.remove(item.getId());
                 } else {
                     buildingEntity.getStaffs().remove(item);
-                    buildingRepository.save(buildingEntity);
                 }
             });
             newStaffIds.forEach(id -> {
                 UserEntity userEntity = userRepository.findById(id).orElse(null);
                 if(userEntity != null){
                     buildingEntity.getStaffs().add(userEntity);
-                    buildingRepository.save(buildingEntity);
                 }
             });
+            buildingRepository.save(buildingEntity);
         }
     }
 
@@ -226,8 +216,8 @@ public class BuildingService implements IBuildingService {
         if (null != buildingDTO.getImageBase64()) {
             if (null != buildingEntity.getAvatar()) {
                 if (!path.equals(buildingEntity.getAvatar())) {
-                    File file = new File("C://home/office" + buildingEntity.getAvatar());
-                    file.delete();
+//                    File file = new File("C://home/office" + buildingEntity.getAvatar());
+//                    file.delete();
                 }
             }
             byte[] bytes = Base64.decodeBase64(buildingDTO.getImageBase64().getBytes());

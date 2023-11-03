@@ -64,10 +64,10 @@ public class BuildingEntity extends BaseEntity {
     @Column(name="brokeragetee",precision = 13, scale = 2)
     private BigDecimal brokeragetee;
 
-    @OneToMany(mappedBy = "building",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "building",cascade = {CascadeType.PERSIST, CascadeType.MERGE},orphanRemoval = true)
     private List<RentAreaEntity> rentAreas;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.LAZY)
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     @JoinTable(name = "assignmentbuilding",
             joinColumns = @JoinColumn(name = "buildingid"),
             inverseJoinColumns = @JoinColumn(name = "staffid"))
