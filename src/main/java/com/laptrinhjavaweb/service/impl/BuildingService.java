@@ -1,6 +1,7 @@
 package com.laptrinhjavaweb.service.impl;
 
 import com.laptrinhjavaweb.builder.BuildingSearchBuilder;
+import com.laptrinhjavaweb.constant.SystemConstant;
 import com.laptrinhjavaweb.converter.BuildingConverter;
 import com.laptrinhjavaweb.dto.BuildingDTO;
 import com.laptrinhjavaweb.dto.BuildingSearchDTO;
@@ -9,6 +10,7 @@ import com.laptrinhjavaweb.entity.RentAreaEntity;
 import com.laptrinhjavaweb.entity.UserEntity;
 import com.laptrinhjavaweb.enumDefine.DistrictEnum;
 import com.laptrinhjavaweb.enumDefine.TypeEnum;
+import com.laptrinhjavaweb.exception.NotFoundException;
 import com.laptrinhjavaweb.repository.BuildingRepository;
 import com.laptrinhjavaweb.repository.RentAreaRepository;
 import com.laptrinhjavaweb.repository.UserRepository;
@@ -178,29 +180,25 @@ public class BuildingService implements IBuildingService {
     @Override
     @Transactional
     public void delete(List<Long> ids) {
-        buildingRepository.deleteByIdIn(ids);
+        if(ids.size() >0){
+            Long count = buildingRepository.countByIdIn(ids);
+            if(count != ids.size()){
+                throw new NotFoundException(SystemConstant.BUILDING_NOT_FOUND);
+            }
+            buildingRepository.deleteByIdIn(ids);
+        }
     }
 
     @Override
     @Transactional
     public void updateStaffOfBuilding(Long buildingId, List<Long> staffIds) {
-        List<Long> newStaffIds = new ArrayList<>(staffIds);
         BuildingEntity buildingEntity = buildingRepository.findById(buildingId).orElse(null);
         if (buildingEntity != null) {
-            List<UserEntity> currentStaffsOfBuilding = userRepository.findUsersByBuildings_Id(buildingId);
-            currentStaffsOfBuilding.forEach(item -> {
-                if (staffIds.contains(item.getId())) {
-                    newStaffIds.remove(item.getId());
-                } else {
-                    buildingEntity.getStaffs().remove(item);
-                }
-            });
-            newStaffIds.forEach(id -> {
-                UserEntity userEntity = userRepository.findById(id).orElse(null);
-                if(userEntity != null){
-                    buildingEntity.getStaffs().add(userEntity);
-                }
-            });
+            List<UserEntity> newStaffs = userRepository.findByIdIn(staffIds);
+            if(staffIds.size() != newStaffs.size()){
+                throw new NotFoundException(SystemConstant.USER_NOT_FOUND);
+            }
+            buildingEntity.setStaffs(newStaffs);
             buildingRepository.save(buildingEntity);
         }
     }

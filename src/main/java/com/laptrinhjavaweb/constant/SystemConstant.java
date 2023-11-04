@@ -18,4 +18,6 @@ public class SystemConstant {
     public static final String PASSWORD_DEFAULT = "123456";
     public static final String CHANGE_PASSWORD_FAIL = "change_password_fail";
     public static final String ONE_EQUAL_ONE = " where 1 = 1";
+    public static final String BUILDING_NOT_FOUND = "Không tìm thấy tòa nhà";
+    public static final String USER_NOT_FOUND = "Không tìm thấy user";
 }
