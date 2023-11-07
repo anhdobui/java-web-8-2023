@@ -8,6 +8,7 @@ import com.laptrinhjavaweb.dto.response.StaffResponseDTO;
 import com.laptrinhjavaweb.entity.RoleEntity;
 import com.laptrinhjavaweb.entity.UserEntity;
 import com.laptrinhjavaweb.exception.MyException;
+import com.laptrinhjavaweb.repository.BuildingRepository;
 import com.laptrinhjavaweb.repository.RoleRepository;
 import com.laptrinhjavaweb.repository.UserRepository;
 import com.laptrinhjavaweb.service.IUserService;
@@ -40,6 +41,9 @@ public class UserService implements IUserService {
 
     @Autowired
     private UserConverter userConverter;
+
+    @Autowired
+    private BuildingRepository buildingRepository;
 
     @Override
     public UserDTO findOneByUserNameAndStatus(String name, int status) {
@@ -170,10 +174,9 @@ public class UserService implements IUserService {
     public List<StaffResponseDTO> getStaffsEnable(Long buildingid) {
         List<StaffResponseDTO> result = new ArrayList<>();
         List<UserEntity> staffs = userRepository.findByStatusAndRoles_Code(1,"STAFF");
-        List<UserEntity> staffsOfBuilding = userRepository.findUsersByBuildings_Id(buildingid);
-        List<Long> staffIdsOfBuilding = staffsOfBuilding.stream().map(UserEntity::getId).collect(Collectors.toList());
         staffs.forEach(item -> {
-            StaffResponseDTO staffResponseDTO = userConverter.convertToStaffResponDto(item,staffIdsOfBuilding);
+            boolean isExits = buildingRepository.existsByIdAndStaffs_Id(buildingid,item.getId());
+            StaffResponseDTO staffResponseDTO = userConverter.convertToStaffResponDto(item,isExits);
             result.add(staffResponseDTO);
         });
         return result;

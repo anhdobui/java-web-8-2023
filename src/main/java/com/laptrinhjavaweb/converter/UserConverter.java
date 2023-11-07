@@ -31,4 +31,11 @@ public class UserConverter {
         result.setChecked(staffIdsOfBuilding.contains(entity.getId()) ? "checked":"");
         return result;
     }
+    public StaffResponseDTO convertToStaffResponDto(UserEntity entity, boolean isExits){
+        StaffResponseDTO result = new StaffResponseDTO();
+        result.setFullName(entity.getFullName());
+        result.setStaffId(entity.getId());
+        result.setChecked(isExits ? "checked":"");
+        return result;
+    }
 }

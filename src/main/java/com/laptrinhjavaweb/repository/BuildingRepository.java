@@ -10,4 +10,5 @@ import java.util.List;
 public interface BuildingRepository extends JpaRepository<BuildingEntity, Long>, BuildingRepositoryCustom {
     void deleteByIdIn(List<Long> ids);
     Long countByIdIn(List<Long> ids);
+    boolean existsByIdAndStaffs_Id(Long buildingId,Long staffId);
 }
