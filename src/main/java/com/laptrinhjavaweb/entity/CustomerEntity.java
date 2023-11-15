@@ -16,6 +16,18 @@ public class CustomerEntity extends BaseEntity{
     @Column
     private String email;
 
+    @Column
+    private String company;
+
+    @Column
+    private String desire;
+
+    @Column
+    private String note;
+
+    @Column(columnDefinition = "BOOLEAN DEFAULT false")
+    private boolean deleted;
+
     @ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
         @JoinTable(name = "assignmentcustomer",
             joinColumns = @JoinColumn(name = "customerid"),
@@ -64,4 +76,37 @@ public class CustomerEntity extends BaseEntity{
     public void setTransactions(List<TransactionEntity> transactions) {
         this.transactions = transactions;
     }
+
+    public String getCompany() {
+        return company;
+    }
+
+    public void setCompany(String company) {
+        this.company = company;
+    }
+
+    public String getDesire() {
+        return desire;
+    }
+
+    public void setDesire(String desire) {
+        this.desire = desire;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
+
 }

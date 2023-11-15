@@ -140,9 +140,13 @@
                             </fieldset>
                         </display:column>
                         <display:column headerClass="text-left" property="fullName" title="Tên khách hàng"/>
+                        <display:column headerClass="text-left" property="staffName" title="Nhân viên quản lý"/>
                         <display:column headerClass="text-left" property="phone" title="Số điện thoại"/>
                         <display:column headerClass="text-left" property="email" title="Email"/>
-                        <%--<display:column headerClass="text-left" property="desire" title="Nhu cầu"/>--%>
+                        <display:column headerClass="text-left" property="desire" title="Nhu cầu"/>
+                        <display:column headerClass="text-left" property="modifiedBy" title="Người nhập"/>
+                        <display:column headerClass="text-left" property="modifiedDate" title="Ngày nhập"/>
+                        <display:column headerClass="text-left" property="status" title="Tình trạng"/>
                         <display:column headerClass="text-left"  title="Thao tác" >
                             <button
                                     class="btn btn-xs btn-info"
@@ -156,7 +160,7 @@
                                     class="btn btn-xs btn-info"
                                     data-toggle="tooltip"
                                     title="Chỉnh sửa tòa nhà"
-                                    href="/admin/building-edit?id=${buildingList.id}"
+                                    href="/admin/customer-edit?id=${customerList.id}"
                             >
                                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                             </a>

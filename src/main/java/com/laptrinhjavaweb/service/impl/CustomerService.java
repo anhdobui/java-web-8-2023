@@ -4,6 +4,7 @@ import com.laptrinhjavaweb.builder.CustomerBuilder;
 import com.laptrinhjavaweb.constant.SystemConstant;
 import com.laptrinhjavaweb.converter.CustomerConverter;
 import com.laptrinhjavaweb.dto.CustomerDTO;
+import com.laptrinhjavaweb.dto.CustomerSearchDTO;
 import com.laptrinhjavaweb.entity.CustomerEntity;
 import com.laptrinhjavaweb.exception.NotFoundException;
 import com.laptrinhjavaweb.repository.CustomerRepository;
@@ -28,9 +29,9 @@ public class CustomerService implements ICustomerService {
     private CustomerConverter customerConverter;
 
     @Override
-    public Page<CustomerDTO> findCustomer(CustomerDTO customerDTO, Pageable pageable) {
+    public Page<CustomerDTO> findCustomer(CustomerSearchDTO customerSearchDTO, Pageable pageable) {
         List<CustomerDTO> customerDTOS = new ArrayList<>();
-        CustomerBuilder customerBuilder = convertToCustomerBuilder(customerDTO);
+        CustomerBuilder customerBuilder = convertToCustomerBuilder(customerSearchDTO);
         List<CustomerEntity> customerEntities = customerRepository.findByCustomer(customerBuilder,pageable);
         Long totalItem = totalItemFound(customerBuilder);
         customerEntities.forEach(item -> {
@@ -38,6 +39,16 @@ public class CustomerService implements ICustomerService {
             customerDTOS.add(itemDTO);
         });
         Page<CustomerDTO> result = new PageImpl<>(customerDTOS,pageable,totalItem);
+        return result;
+    }
+
+    @Override
+    public CustomerDTO getCustomer(Long id) {
+        CustomerDTO result = null;
+        CustomerEntity customerEntity = customerRepository.findById(id).orElse(null);
+        if (customerEntity != null) {
+            result = customerConverter.convertToDto(customerEntity);
+        }
         return result;
     }
 
@@ -59,12 +70,29 @@ public class CustomerService implements ICustomerService {
         return 0;
     }
 
-    private CustomerBuilder convertToCustomerBuilder(CustomerDTO customerDTO) {
+    @Override
+    @Transactional
+    public CustomerDTO save(CustomerDTO newCustomer) {
+        Long customerId = newCustomer.getId();
+        CustomerEntity customerEntity = customerConverter.convertToEntity(newCustomer);
+        if (customerId != null) { // update
+            CustomerEntity foundCustomer = customerRepository.findById(customerId)
+                    .orElse(null);
+            if(foundCustomer != null){
+                customerEntity.setStaffs(foundCustomer.getStaffs());
+                customerEntity.setTransactions(foundCustomer.getTransactions());
+            }
+        }
+        customerEntity = customerRepository.save(customerEntity);
+        return customerConverter.convertToDto(customerEntity);
+    }
+
+    private CustomerBuilder convertToCustomerBuilder(CustomerSearchDTO customerSearchDTO) {
         CustomerBuilder result = new CustomerBuilder.Builder()
-                                .setPhone(customerDTO.getPhone())
-                                .setEmail(customerDTO.getEmail())
-                                .setFullName(customerDTO.getFullName())
-                                .setStaffId(customerDTO.getStaffId())
+                                .setPhone(customerSearchDTO.getPhone())
+                                .setEmail(customerSearchDTO.getEmail())
+                                .setFullName(customerSearchDTO.getFullName())
+                                .setStaffId(customerSearchDTO.getStaffId())
                                 .build();
         return result;
     }

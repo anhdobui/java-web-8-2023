@@ -3,6 +3,7 @@ package com.laptrinhjavaweb.controller.admin;
 import com.laptrinhjavaweb.dto.BuildingDTO;
 import com.laptrinhjavaweb.dto.BuildingSearchDTO;
 import com.laptrinhjavaweb.dto.CustomerDTO;
+import com.laptrinhjavaweb.dto.CustomerSearchDTO;
 import com.laptrinhjavaweb.service.ICustomerService;
 import com.laptrinhjavaweb.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,10 +26,10 @@ public class CustomerController {
     private ICustomerService customerService;
 
     @RequestMapping(value = "/admin/customer-list", method = RequestMethod.GET)
-    public ModelAndView customerList(@ModelAttribute("modelSearch") CustomerDTO customerDTO,@RequestParam(value="page",required = false) Integer page,
+    public ModelAndView customerList(@ModelAttribute("modelSearch") CustomerSearchDTO customerSearchDTO, @RequestParam(value="page",required = false) Integer page,
                                      @RequestParam(value="pageSize",required = false) Integer pageSize){
         ModelAndView mav = new ModelAndView("admin/customer/list");
-        mav.addObject("modelSearch",customerDTO);
+        mav.addObject("modelSearch",customerSearchDTO);
         mav.addObject("staffmaps",userService.getStaffMaps());
         if(pageSize == null){
             pageSize = 2;
@@ -37,7 +38,7 @@ public class CustomerController {
             page = 1;
         }
         Pageable pageable = PageRequest.of(page - 1, pageSize);
-        Page<CustomerDTO> objects = customerService.findCustomer(customerDTO,pageable);
+        Page<CustomerDTO> objects = customerService.findCustomer(customerSearchDTO,pageable);
         mav.addObject("customers",objects.getContent());
         mav.addObject("currentPage",objects.getNumber()+1);
         mav.addObject("totalItems",objects.getTotalElements());
@@ -49,7 +50,13 @@ public class CustomerController {
     @RequestMapping(value = "/admin/customer-edit", method = RequestMethod.GET)
     public ModelAndView buildingEdit(@RequestParam(name = "id",required = false) Long id){
         ModelAndView mav = new ModelAndView("admin/customer/edit");
-
+        CustomerDTO oldCustomer = new CustomerDTO();
+        String mode = id != null && customerService.getCustomer(id) != null ? "update":"add";
+        if(mode.equals("update")){
+            oldCustomer = customerService.getCustomer(id);
+        }
+        mav.addObject("mode",mode);
+        mav.addObject("customerEdit",oldCustomer);
         return mav;
     }
 }
