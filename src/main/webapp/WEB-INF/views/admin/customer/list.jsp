@@ -308,11 +308,13 @@
             data:JSON.stringify(staffIds),
             contentType: 'application/json',
             success:function (response) {
-                showToast("Giao khách hàng cho nhân viên quản lý thành công","success")
+
+                localStorage.setItem("messageSuccess", "Giao khách hàng cho nhân viên quản lý thành công");
+                location.reload();
             },
             error:function (response) {
-                showToast("Đã có lỗi xảy ra","danger")
-                console.log(response)
+                localStorage.setItem("messageDanger", "Đã có lỗi xảy ra");
+                location.reload();
             }
         })
     }

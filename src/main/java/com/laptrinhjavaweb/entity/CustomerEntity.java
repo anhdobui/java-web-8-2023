@@ -28,13 +28,13 @@ public class CustomerEntity extends BaseEntity{
     @Column(columnDefinition = "BOOLEAN DEFAULT false")
     private boolean deleted;
 
-    @ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE},fetch = FetchType.LAZY)
         @JoinTable(name = "assignmentcustomer",
             joinColumns = @JoinColumn(name = "customerid"),
             inverseJoinColumns = @JoinColumn(name = "staffid"))
     private List<UserEntity> staffs;
 
-    @OneToMany(mappedBy = "customer")
+    @OneToMany(mappedBy = "customer",cascade = {CascadeType.PERSIST, CascadeType.MERGE},orphanRemoval = true)
     private List<TransactionEntity> transactions;
 
     public String getFullName() {
