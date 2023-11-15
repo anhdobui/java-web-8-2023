@@ -105,6 +105,18 @@ public class CustomerService implements ICustomerService {
         }
     }
 
+    @Override
+    @Transactional
+    public boolean updateCustomerStatus(Long customerid, boolean isDeleted) {
+        CustomerEntity customerEntity = customerRepository.findById(customerid).orElse(null);
+        if(customerEntity != null){
+            customerEntity.setDeleted(isDeleted);
+            customerRepository.save(customerEntity);
+            return true;
+        }
+        return false;
+    }
+
     private CustomerBuilder convertToCustomerBuilder(CustomerSearchDTO customerSearchDTO) {
         CustomerBuilder result = new CustomerBuilder.Builder()
                                 .setPhone(customerSearchDTO.getPhone())

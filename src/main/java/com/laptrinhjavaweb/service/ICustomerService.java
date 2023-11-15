@@ -18,4 +18,6 @@ public interface ICustomerService {
     CustomerDTO save(CustomerDTO newCustomer);
 
     void updateStaffOfCustomer(Long customerid, List<Long> staffIds);
+
+    boolean updateCustomerStatus(Long customerid, boolean isDeleted);
 }

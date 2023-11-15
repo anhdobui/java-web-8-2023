@@ -165,6 +165,21 @@
                             >
                                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                             </a>
+                            <button
+                                    class="btn btn-xs ${customerList.status.equals('Đang xử lý') ? 'btn-info':'btn-danger'}"
+                                    data-toggle="tooltip"
+                                    title="Cập nhật tình trạng"
+                                    onclick="deleteSoftCustomer(${customerList.id},${customerList.status.equals('Đang xử lý') ? true:false})"
+                            >
+                                <c:choose>
+                                    <c:when test="${customerList.status.equals('Đang xử lý')}">
+                                        <i class="fa fa-eye" aria-hidden="true"></i>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <i class="fa fa-eye-slash" aria-hidden="true"></i>
+                                    </c:otherwise>
+                                </c:choose>
+                            </button>
                         </display:column>
                     </display:table>
 
@@ -238,6 +253,24 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twbs-pagination/1.4.2/jquery.twbsPagination.min.js"
         integrity="sha512-frFP3ZxLshB4CErXkPVEXnd5ingvYYtYhE5qllGdZmcOlRKNEPbufyupfdSTNmoF5ICaQNO6SenXzOZvoGkiIA=="
         crossorigin="anonymous" referrerpolicy="no-referrer">
+</script>
+<script>
+    function deleteSoftCustomer(customerid,status){
+        $.ajax({
+            type:'PUT',
+            url:'${baseAPI}/'+customerid,
+            data:JSON.stringify(status),
+            contentType: 'application/json',
+            success:function (response) {
+                localStorage.setItem("messageSuccess", "Cập nhật trạng thái của khách hàng thành công");
+                location.reload();
+            },
+            error:function (response) {
+                 localStorage.setItem("messageDanger", "Đã có lỗi xảy ra");
+                location.reload();
+            }
+        })
+    }
 </script>
 <script>
     function showToast(message,status){
@@ -318,6 +351,8 @@
             }
         })
     }
+
+
 </script>
 <script >
     $('#btnSearch').click(function (e){
@@ -398,6 +433,7 @@ $(function () {
     });
 });
 </script>
+
 </body>
 
 </html>

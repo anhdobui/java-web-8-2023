@@ -33,4 +33,9 @@ public class CustomerAPI {
     public void assignmentBuilding(@PathVariable(name = "customerid") Long customerid,@RequestBody List<Long> staffIds){
         customerService.updateStaffOfCustomer(customerid,staffIds);
     }
+
+    @PutMapping("/{customerid}")
+    public boolean updateCustomerStatus(@PathVariable(name = "customerid") Long customerid,@RequestBody boolean isDeleted){
+        return customerService.updateCustomerStatus(customerid,isDeleted);
+    }
 }
