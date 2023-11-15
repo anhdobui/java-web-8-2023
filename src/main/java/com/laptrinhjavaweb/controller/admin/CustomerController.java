@@ -50,6 +50,7 @@ public class CustomerController {
     @RequestMapping(value = "/admin/customer-edit", method = RequestMethod.GET)
     public ModelAndView buildingEdit(@RequestParam(name = "id",required = false) Long id){
         ModelAndView mav = new ModelAndView("admin/customer/edit");
+        mav.addObject("staffmaps",userService.getStaffMaps());
         CustomerDTO oldCustomer = new CustomerDTO();
         String mode = id != null && customerService.getCustomer(id) != null ? "update":"add";
         if(mode.equals("update")){

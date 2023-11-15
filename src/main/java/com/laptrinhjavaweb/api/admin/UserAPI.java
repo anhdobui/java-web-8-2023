@@ -3,12 +3,17 @@ package com.laptrinhjavaweb.api.admin;
 import com.laptrinhjavaweb.constant.SystemConstant;
 import com.laptrinhjavaweb.dto.PasswordDTO;
 import com.laptrinhjavaweb.dto.UserDTO;
+import com.laptrinhjavaweb.dto.response.ResponseDTO;
+import com.laptrinhjavaweb.dto.response.StaffResponseDTO;
 import com.laptrinhjavaweb.exception.MyException;
 import com.laptrinhjavaweb.service.IUserService;
 //import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/user")
@@ -56,5 +61,14 @@ public class UserAPI {
             userService.delete(idList);
         }
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping()
+    public ResponseDTO loadStaff(@RequestParam(required = false) Map<String, Object> params ){
+        ResponseDTO result = new ResponseDTO();
+        List<StaffResponseDTO> staffs = userService.getStaffsEnable(params);
+        result.setMessage("success");
+        result.setData(staffs);
+        return result;
     }
 }

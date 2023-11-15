@@ -6,8 +6,10 @@ import com.laptrinhjavaweb.converter.CustomerConverter;
 import com.laptrinhjavaweb.dto.CustomerDTO;
 import com.laptrinhjavaweb.dto.CustomerSearchDTO;
 import com.laptrinhjavaweb.entity.CustomerEntity;
+import com.laptrinhjavaweb.entity.UserEntity;
 import com.laptrinhjavaweb.exception.NotFoundException;
 import com.laptrinhjavaweb.repository.CustomerRepository;
+import com.laptrinhjavaweb.repository.UserRepository;
 import com.laptrinhjavaweb.service.ICustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -24,6 +26,9 @@ public class CustomerService implements ICustomerService {
 
     @Autowired
     private CustomerRepository customerRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Autowired
     private CustomerConverter customerConverter;
@@ -85,6 +90,19 @@ public class CustomerService implements ICustomerService {
         }
         customerEntity = customerRepository.save(customerEntity);
         return customerConverter.convertToDto(customerEntity);
+    }
+
+    @Override
+    public void updateStaffOfCustomer(Long customerid, List<Long> staffIds) {
+        CustomerEntity customerEntity = customerRepository.findById(customerid).orElse(null);
+        if (customerEntity != null) {
+            List<UserEntity> newStaffs = userRepository.findByIdIn(staffIds);
+            if(staffIds.size() != newStaffs.size()){
+                throw new NotFoundException(SystemConstant.USER_NOT_FOUND);
+            }
+            customerEntity.setStaffs(newStaffs);
+            customerRepository.save(customerEntity);
+        }
     }
 
     private CustomerBuilder convertToCustomerBuilder(CustomerSearchDTO customerSearchDTO) {

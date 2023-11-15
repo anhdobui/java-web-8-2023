@@ -16,4 +16,6 @@ public interface ICustomerService {
     long delete(List<Long> ids);
 
     CustomerDTO save(CustomerDTO newCustomer);
+
+    void updateStaffOfCustomer(Long customerid, List<Long> staffIds);
 }

@@ -9,6 +9,7 @@
 <%@include file="/common/taglib.jsp"%>
 <c:url var="customerListURL" value="/admin/customer-list" />
 <c:url var="baseAPI" value="/api/customer" />
+<c:url var="loadStaffAPI" value="/api/user" />
 <html>
 <head>
     <title>Danh sách khách hàng</title>
@@ -206,6 +207,34 @@
         </div>
     </div>
 </div>
+<div id="assignmentCustomerModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Danh sách nhân viên</h4>
+            </div>
+            <div class="modal-body">
+                <table class="table table-bordered" id="staffList">
+                    <thead>
+                    <tr>
+                        <th>Chọn nhân viên</th>
+                        <th>Tên nhân viên</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" id="btn_send_assignmentCustomer" data-dismiss="modal">Gửi</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twbs-pagination/1.4.2/jquery.twbsPagination.min.js"
         integrity="sha512-frFP3ZxLshB4CErXkPVEXnd5ingvYYtYhE5qllGdZmcOlRKNEPbufyupfdSTNmoF5ICaQNO6SenXzOZvoGkiIA=="
         crossorigin="anonymous" referrerpolicy="no-referrer">
@@ -224,6 +253,69 @@
     }
     loadMessageinLocalSt("messageSuccess")
     loadMessageinLocalSt("messageDanger")
+</script>
+<script>
+    function openModalAssignmentCustomer() {
+        $("#assignmentCustomerModal").modal();
+    }
+    function assignmentCustomer(customerid){
+        openModalAssignmentCustomer();
+        loadStaff(customerid);
+    }
+
+    function loadStaff(buildingid){
+        $.ajax({
+            type:'GET',
+            url:'${loadStaffAPI}?customerid='+buildingid,
+            dataType:"json",
+            success:function (response) {
+                var row = '';
+                $.each(response.data,function(index,item){
+                    row += '<tr>';
+                    row += '<td class="text-center"><input type="checkbox" value="'+item.staffId+'" id="staffCheckbox_'+item.staffId+'" class="check-box-element"'+item.checked+' /></td>'
+                    row += '<td class="text-center">'+item.fullName+'</td>'
+                    row += '</tr>';
+                })
+                $('#staffList tbody').html(row);
+                $('#staffList').attr("data",buildingid)
+
+            },
+            error:function (response) {
+                showToast("Đã có lỗi xảy ra","danger")
+                console.log(response)
+            }
+        })
+    }
+    function getStaffChecked(){
+        var listStaffChecked = $("#assignmentCustomerModal tbody .check-box-element:checked")
+        var staffIds = []
+        listStaffChecked.each(function() {
+            var value = $(this).val();
+            staffIds.push(value)
+        });
+        return staffIds
+    }
+    $("#btn_send_assignmentCustomer").click(function (){
+        var customerid = $('#staffList').attr("data")
+        var staffIds = getStaffChecked()
+        sendApiAssignmentCustomer(customerid,staffIds)
+    })
+
+    function sendApiAssignmentCustomer(customerid,staffIds) {
+        $.ajax({
+            type:'POST',
+            url:'${baseAPI}/'+customerid+'/assignment',
+            data:JSON.stringify(staffIds),
+            contentType: 'application/json',
+            success:function (response) {
+                showToast("Giao khách hàng cho nhân viên quản lý thành công","success")
+            },
+            error:function (response) {
+                showToast("Đã có lỗi xảy ra","danger")
+                console.log(response)
+            }
+        })
+    }
 </script>
 <script >
     $('#btnSearch').click(function (e){

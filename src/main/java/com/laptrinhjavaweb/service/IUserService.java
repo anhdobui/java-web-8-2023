@@ -24,6 +24,5 @@ public interface IUserService {
     void delete(long[] ids);
     Map<Long,String> getStaffMaps();
     List<StaffResponseDTO> getStaffsEnable(Long buildingid);
-
-
+    List<StaffResponseDTO> getStaffsEnable(Map<String, Object> params);
 }

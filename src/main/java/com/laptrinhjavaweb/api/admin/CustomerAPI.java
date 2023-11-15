@@ -28,4 +28,9 @@ public class CustomerAPI {
     public CustomerDTO createCustomer(@RequestBody CustomerDTO newCustomer){
         return customerService.save(newCustomer);
     }
+
+    @PostMapping("/{customerid}/assignment")
+    public void assignmentBuilding(@PathVariable(name = "customerid") Long customerid,@RequestBody List<Long> staffIds){
+        customerService.updateStaffOfCustomer(customerid,staffIds);
+    }
 }

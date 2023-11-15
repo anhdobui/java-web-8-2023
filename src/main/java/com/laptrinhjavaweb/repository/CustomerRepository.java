@@ -9,4 +9,5 @@ import java.util.List;
 public interface CustomerRepository extends JpaRepository<CustomerEntity,Long>, CustomerRepositoryCustom {
     Long countByIdIn(List<Long> ids);
     Long deleteByIdIn(List<Long> ids);
+    boolean existsByIdAndStaffs_Id(Long id, Long staffid);
 }

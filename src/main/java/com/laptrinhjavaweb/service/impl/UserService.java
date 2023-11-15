@@ -9,9 +9,11 @@ import com.laptrinhjavaweb.entity.RoleEntity;
 import com.laptrinhjavaweb.entity.UserEntity;
 import com.laptrinhjavaweb.exception.MyException;
 import com.laptrinhjavaweb.repository.BuildingRepository;
+import com.laptrinhjavaweb.repository.CustomerRepository;
 import com.laptrinhjavaweb.repository.RoleRepository;
 import com.laptrinhjavaweb.repository.UserRepository;
 import com.laptrinhjavaweb.service.IUserService;
+import com.laptrinhjavaweb.utils.MapUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -44,6 +46,9 @@ public class UserService implements IUserService {
 
     @Autowired
     private BuildingRepository buildingRepository;
+
+    @Autowired
+    private CustomerRepository customerRepository;
 
     @Override
     public UserDTO findOneByUserNameAndStatus(String name, int status) {
@@ -180,6 +185,31 @@ public class UserService implements IUserService {
             result.add(staffResponseDTO);
         });
         return result;
+    }
+
+    @Override
+    public List<StaffResponseDTO> getStaffsEnable(Map<String, Object> params) {
+        List<StaffResponseDTO> result = new ArrayList<>();
+        List<UserEntity> staffs = userRepository.findByStatusAndRoles_Code(1,"STAFF");
+        staffs.forEach(item -> {
+            boolean isExits = false;
+            if(params.get("buildingid")!=null || params.get("customerid")!=null ){
+                if(params.get("buildingid")!= null ){
+                    Long buildingid = MapUtils.getObject(params,"buildingid",Long.class);
+                    isExits = buildingRepository.existsByIdAndStaffs_Id(buildingid,item.getId());
+                }
+                if(params.get("customerid")!=null){
+                    Long customerid = MapUtils.getObject(params,"customerid",Long.class);
+                    isExits = customerRepository.existsByIdAndStaffs_Id(customerid,item.getId());
+                }
+
+            }
+
+            StaffResponseDTO staffResponseDTO = userConverter.convertToStaffResponDto(item,isExits);
+            result.add(staffResponseDTO);
+        });
+        return result;
+
     }
 
 
