@@ -90,15 +90,18 @@
                                             <form:input path="email" type="email" cssClass="form-control" />
                                         </div>
                                     </div>
-                                    <div class="row">
-                                        <div class="col-sm-3">
-                                            <label for="staffId">Chọn nhân viên phụ trách</label>
-                                            <form:select path="staffId" cssClass="form-control" >
-                                                <form:option value="-1" label="---Chọn nhân viên---" />
-                                                <form:options items="${staffmaps}" />
-                                            </form:select>
+                                    <security:authorize access="hasRole('MANAGER')">
+                                        <div class="row">
+                                            <div class="col-sm-3">
+                                                <label for="staffId">Chọn nhân viên phụ trách</label>
+                                                <form:select path="staffId" cssClass="form-control" >
+                                                    <form:option value="-1" label="---Chọn nhân viên---" />
+                                                    <form:options items="${staffmaps}" />
+                                                </form:select>
+                                            </div>
                                         </div>
-                                    </div>
+                                    </security:authorize>
+
                                     <br/>
                                     <div class="row">
                                         <div class="col-sm-12">
@@ -149,14 +152,16 @@
                         <display:column headerClass="text-left" property="modifiedDate" title="Ngày nhập"/>
                         <display:column headerClass="text-left" property="status" title="Tình trạng"/>
                         <display:column headerClass="text-left"  title="Thao tác" >
-                            <button
-                                    class="btn btn-xs btn-info"
-                                    data-toggle="tooltip"
-                                    title="Giao tòa nhà"
-                                    onclick="assignmentCustomer(${customerList.id})"
-                            >
-                                <i class="fa fa-bars" aria-hidden="true"></i>
-                            </button>
+                            <security:authorize access="hasRole('MANAGER')">
+                                <button
+                                        class="btn btn-xs btn-info"
+                                        data-toggle="tooltip"
+                                        title="Giao tòa nhà"
+                                        onclick="assignmentCustomer(${customerList.id})"
+                                >
+                                    <i class="fa fa-bars" aria-hidden="true"></i>
+                                </button>
+                            </security:authorize>
                             <a
                                     class="btn btn-xs btn-info"
                                     data-toggle="tooltip"
@@ -222,34 +227,37 @@
         </div>
     </div>
 </div>
-<div id="assignmentCustomerModal" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-        <!-- Modal content-->
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Danh sách nhân viên</h4>
-            </div>
-            <div class="modal-body">
-                <table class="table table-bordered" id="staffList">
-                    <thead>
-                    <tr>
-                        <th>Chọn nhân viên</th>
-                        <th>Tên nhân viên</th>
-                    </tr>
-                    </thead>
-                    <tbody>
+<security:authorize access="hasRole('MANAGER')">
+    <div id="assignmentCustomerModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Danh sách nhân viên</h4>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-bordered" id="staffList">
+                        <thead>
+                        <tr>
+                            <th>Chọn nhân viên</th>
+                            <th>Tên nhân viên</th>
+                        </tr>
+                        </thead>
+                        <tbody>
 
-                    </tbody>
-                </table>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" id="btn_send_assignmentCustomer" data-dismiss="modal">Gửi</button>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" id="btn_send_assignmentCustomer" data-dismiss="modal">Gửi</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
+</security:authorize>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twbs-pagination/1.4.2/jquery.twbsPagination.min.js"
         integrity="sha512-frFP3ZxLshB4CErXkPVEXnd5ingvYYtYhE5qllGdZmcOlRKNEPbufyupfdSTNmoF5ICaQNO6SenXzOZvoGkiIA=="
         crossorigin="anonymous" referrerpolicy="no-referrer">

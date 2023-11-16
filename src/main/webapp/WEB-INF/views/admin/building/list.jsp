@@ -155,13 +155,15 @@
                                             <label for="managerPhone">Điện thoại quản lý</label>
                                             <form:input path="managerPhone" cssClass="form-control" />
                                         </div>
-                                        <div class="col-sm-3">
-                                            <label for="staffId">Chọn nhân viên phụ trách</label>
-                                           <form:select path="staffId" cssClass="form-control" >
-                                               <form:option value="-1" label="---Chọn nhân viên---" />
-                                               <form:options items="${staffmaps}" />
-                                           </form:select>
-                                        </div>
+                                        <security:authorize access="hasRole('MANAGER')">
+                                            <div class="col-sm-3">
+                                                <label for="staffId">Chọn nhân viên phụ trách</label>
+                                                <form:select path="staffId" cssClass="form-control" >
+                                                    <form:option value="-1" label="---Chọn nhân viên---" />
+                                                    <form:options items="${staffmaps}" />
+                                                </form:select>
+                                            </div>
+                                        </security:authorize>
                                     </div>
                                     <div class="row">
                                         <div></div>
@@ -226,14 +228,16 @@
                        <display:column headerClass="text-left" property="rentPrice" title="Giá thuê"/>
                        <display:column headerClass="text-left" property="serviceFee" title="Phí dịch vụ"/>
                        <display:column headerClass="text-left"  title="Thao tác" >
-                           <button
-                                   class="btn btn-xs btn-info"
-                                   data-toggle="tooltip"
-                                   title="Giao tòa nhà"
-                                   onclick="assignmentBuilding(${buildingList.id})"
-                           >
-                               <i class="fa fa-bars" aria-hidden="true"></i>
-                           </button>
+                           <security:authorize access="hasRole('MANAGER')">
+                               <button
+                                       class="btn btn-xs btn-info"
+                                       data-toggle="tooltip"
+                                       title="Giao tòa nhà"
+                                       onclick="assignmentBuilding(${buildingList.id})"
+                               >
+                                   <i class="fa fa-bars" aria-hidden="true"></i>
+                               </button>
+                           </security:authorize>
                            <a
                                    class="btn btn-xs btn-info"
                                    data-toggle="tooltip"
@@ -315,34 +319,37 @@
         <!-- /.page-content -->
     </div>
 </div>
-<div id="assignmentBuildingModal" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-        <!-- Modal content-->
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Danh sách nhân viên</h4>
-            </div>
-            <div class="modal-body">
-                <table class="table table-bordered" id="staffList">
-                    <thead>
-                    <tr>
-                        <th>Chọn nhân viên</th>
-                        <th>Tên nhân viên</th>
-                    </tr>
-                    </thead>
-                    <tbody>
+<security:authorize access="hasRole('MANAGER')">
+    <div id="assignmentBuildingModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Danh sách nhân viên</h4>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-bordered" id="staffList">
+                        <thead>
+                        <tr>
+                            <th>Chọn nhân viên</th>
+                            <th>Tên nhân viên</th>
+                        </tr>
+                        </thead>
+                        <tbody>
 
-                    </tbody>
-                </table>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" id="btn_send_assignmentBuilding" data-dismiss="modal">Gửi</button>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" id="btn_send_assignmentBuilding" data-dismiss="modal">Gửi</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
+</security:authorize>
+
 <div id="deleteModal" class="modal fade" role="dialog">
     <div class="modal-dialog">
         <!-- Modal content-->

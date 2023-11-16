@@ -33,6 +33,7 @@ public class CustomUserDetailService implements UserDetailsService {
             authorities.add(new SimpleGrantedAuthority("ROLE_"+role.getCode()));
         }
         MyUserDetail myUserDetail = new MyUserDetail(name,userDTO.getPassword(),true,true,true,true,authorities);
+        myUserDetail.setId(userDTO.getId());
         BeanUtils.copyProperties(userDTO, myUserDetail);
         return myUserDetail;
     }
