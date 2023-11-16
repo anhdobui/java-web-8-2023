@@ -4,7 +4,10 @@ import com.laptrinhjavaweb.dto.BuildingDTO;
 import com.laptrinhjavaweb.dto.BuildingSearchDTO;
 import com.laptrinhjavaweb.dto.CustomerDTO;
 import com.laptrinhjavaweb.dto.CustomerSearchDTO;
+import com.laptrinhjavaweb.dto.response.TransactionResponseDTO;
+import com.laptrinhjavaweb.enumDefine.TransactionTypeEnum;
 import com.laptrinhjavaweb.service.ICustomerService;
+import com.laptrinhjavaweb.service.ITransactionService;
 import com.laptrinhjavaweb.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -17,6 +20,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 @Controller(value = "customerControllerOfAdmin")
 public class CustomerController {
     @Autowired
@@ -24,6 +31,9 @@ public class CustomerController {
 
     @Autowired
     private ICustomerService customerService;
+
+    @Autowired
+    private ITransactionService transactionService;
 
     @RequestMapping(value = "/admin/customer-list", method = RequestMethod.GET)
     public ModelAndView customerList(@ModelAttribute("modelSearch") CustomerSearchDTO customerSearchDTO, @RequestParam(value="page",required = false) Integer page,
@@ -53,10 +63,14 @@ public class CustomerController {
         mav.addObject("staffmaps",userService.getStaffMaps());
         CustomerDTO oldCustomer = new CustomerDTO();
         String mode = id != null && customerService.getCustomer(id) != null ? "update":"add";
+        List<TransactionResponseDTO> typeTransactions = new ArrayList<>();
         if(mode.equals("update")){
             oldCustomer = customerService.getCustomer(id);
+            typeTransactions = transactionService.getTransactionByCustomerId(id);
+
         }
         mav.addObject("mode",mode);
+        mav.addObject("typeTransaction",typeTransactions);
         mav.addObject("customerEdit",oldCustomer);
         return mav;
     }

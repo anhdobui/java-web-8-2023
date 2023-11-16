@@ -13,7 +13,7 @@ public class TransactionEntity extends  BaseEntity{
     @Column
     private String code;
     @Column
-    private String node;
+    private String note;
 
     @ManyToOne
     @JoinColumn(name = "customerid")
@@ -27,12 +27,12 @@ public class TransactionEntity extends  BaseEntity{
         this.code = code;
     }
 
-    public String getNode() {
-        return node;
+    public String getNote() {
+        return note;
     }
 
-    public void setNode(String node) {
-        this.node = node;
+    public void setNote(String note) {
+        this.note = note;
     }
 
     public CustomerEntity getCustomer() {

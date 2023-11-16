@@ -8,6 +8,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@include file="/common/taglib.jsp"%>
 <c:url var="customerApi" value="/api/customer" />
+<c:url var="transactionApi" value="/api/transaction" />
 <html>
 <head>
     <title>${mode.equals('update') ? "Cập nhật":"Thêm mới"} khách hàng</title>
@@ -102,10 +103,109 @@
 
                 </div>
             </div>
+
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="alert alert-block text-left hidden" id="toast-message">
+                        <button type="button" class="close" data-dismiss="alert">
+                            <i class="ace-icon fa fa-times"></i>
+                        </button>
+                        <span id="text-message"></span>
+                    </div>
+                </div>
+            </div>
+
+            <c:if test="${mode.equals('update') && customerEdit.id != null}">
+                <c:forEach var="type" items="${typeTransaction}">
+                    <div class="row">
+                        <div class="page-header">
+                            <h1>
+                                    ${type.name}
+                                <button class="btn btn-white btn-info btn-bold" onclick="handleAddTransaction('${type.code}','${customerEdit.id}')" ><i class="fa fa-plus-circle" aria-hidden="true"></i></button>
+
+                            </h1>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <table class="table table-bordered" >
+                                    <thead >
+                                    <tr class="row">
+                                        <th class="col-xs-3">Ngày tạo</th>
+                                        <th class="col-xs-9">Ghi chú</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <c:forEach var="transaction" items="${type.transactions}">
+                                        <tr class="row">
+                                            <td class="col-xs-3">${transaction.createdDate}</td>
+                                            <td class="col-xs-9">${transaction.note}</td>
+                                        </tr>
+                                    </c:forEach>
+                                    <tr class="row">
+                                        <td class="col-xs-3"></td>
+                                        <td class="col-xs-9 "><input id="newTransaction_${type.code}" type="text" class="form-control"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+                    </div>
+                </c:forEach>
+            </c:if>
+
+
+
         </div>
         <!-- /.page-content -->
     </div>
 </div>
+
+<script>
+    function showToast(message,status){
+        var toastElm = $("#toast-message").removeClass("hidden")
+        toastElm.addClass("alert-"+status)
+        $("#text-message").text(message)
+    }
+    function loadMessageinLocalSt(name){
+        var message = localStorage.getItem(name);
+        var satus = name == "messageSuccess" ?  "success":"danger"
+        message && showToast(message,satus)
+        message && localStorage.removeItem(name)
+    }
+    loadMessageinLocalSt("messageSuccess")
+    loadMessageinLocalSt("messageDanger")
+</script>
+<c:if test="${mode.equals('update') && customerEdit.id != null}">
+    <script>
+
+        function handleAddTransaction(codeTransaction,customerid){
+            var note = $("#newTransaction_"+codeTransaction).val()
+            if(note.trim()){
+                var data = {}
+                data['code'] = codeTransaction
+                data['note'] = note
+                data['customerid'] = Number(customerid)
+
+                $.ajax({
+                    type:'POST',
+                    url:'${transactionApi}',
+                    data:JSON.stringify(data),
+                    contentType: 'application/json',
+                    success:function (response) {
+                        localStorage.setItem("messageSuccess", "Thêm mới giao dịch thành công");
+                        location.reload();
+                    },
+                    error:function (response) {
+                        localStorage.setItem("messageDanger", "Đã có lỗi xảy ra");
+                        location.reload();
+                    }
+                })
+            }
+        }
+
+    </script>
+</c:if>
 <script>
     $("#btnSendCustomer").click(function(e) {
         e.preventDefault()
